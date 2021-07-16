@@ -1,0 +1,7 @@
+name: pci-plugins
+version: 1.0.0
+author: Contributeurs du plugin
+main: info.projetcohesion.mcplugin.Plugin
+api-version: 1.17
+website: https://github.com/pci-ua/pci-plugins
+prefix: Plugin-PCi
