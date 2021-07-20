@@ -24,7 +24,7 @@ public class Server {
             _server.setExecutor(Executors.newFixedThreadPool(10)); // TODO don't hardcode the thread count for performance reasons
             _server.start();
 
-            System.out.println("HTTP server started on " + _server.getAddress().getHostName() + " port " + _server.getAddress().getPort());
+            System.out.println("HTTP server started on " + _server.getAddress().toString());
         }
     }
 

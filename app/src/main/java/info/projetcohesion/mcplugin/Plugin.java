@@ -12,10 +12,16 @@ import java.io.IOException;
 public class Plugin extends JavaPlugin {
     @Override
     public void onEnable() {
-        System.out.println("Loading pci-plugins");
         try {
-            Server.start();
-        } catch (IOException e) {
+            // Check if ImageMagick is installed
+            Process process = Runtime.getRuntime().exec("magick -version");
+            process.waitFor();
+            if(process.exitValue() == 0) { // If ImageMagick is not installed, the exit value will not be 0
+                Server.start();
+            } else {
+                System.err.println("ImageMagick is not installed, is not on PATH or does not work.");
+            }
+        } catch (IOException | InterruptedException e) {
             System.err.println("Failed to boot the integrated HTTP server !");
             e.printStackTrace();
         }
@@ -23,7 +29,6 @@ public class Plugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        System.out.println("Unloading pci-plugins");
         Server.stop();
     }
 }
