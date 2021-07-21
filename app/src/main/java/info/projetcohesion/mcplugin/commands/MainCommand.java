@@ -14,6 +14,11 @@ import java.util.*;
 
 public class MainCommand implements CommandExecutor {
 
+    /* TODO list
+        - Créer des constantes
+        - Répartir les sous commandes dans plusieurs fichiers
+     */
+
     private final Plugin _plugin = Plugin.getPlugin();
     private int task = 0;
 
