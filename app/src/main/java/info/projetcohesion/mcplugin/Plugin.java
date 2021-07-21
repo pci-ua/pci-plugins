@@ -2,6 +2,7 @@ package info.projetcohesion.mcplugin;
 
 import info.projetcohesion.mcplugin.commands.MainCommand;
 import info.projetcohesion.mcplugin.events.PlayerChunkChangeEvent;
+import info.projetcohesion.mcplugin.events.PlayerServerJoinEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,6 +31,8 @@ public class Plugin extends JavaPlugin {
 
     public void registerEvents() {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerChunkChangeEvent(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerServerJoinEvent(), this);
+
     }
 
     public static Plugin getPlugin() {
