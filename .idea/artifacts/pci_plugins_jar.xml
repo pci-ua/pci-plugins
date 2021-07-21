@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="pci-plugins:jar">
+    <output-path>$USER_HOME$/Desktop/Serveur M/plugins</output-path>
+    <root id="archive" name="pci-plugins.jar">
+      <element id="module-output" name="pci-plugins.app.main" />
+    </root>
+  </artifact>
+</component>
