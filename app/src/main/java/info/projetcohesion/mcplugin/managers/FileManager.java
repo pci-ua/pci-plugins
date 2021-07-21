@@ -42,6 +42,7 @@ public class FileManager {
             this._customFile.save(this._file);
         }catch (IOException e){
             System.err.println("FileManager: Couldn't save file.");
+            e.printStackTrace();
         }
     }
 
