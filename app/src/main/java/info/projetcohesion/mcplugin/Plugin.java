@@ -1,6 +1,9 @@
 package info.projetcohesion.mcplugin;
 
+import info.projetcohesion.mcplugin.commands.MainCommand;
+import info.projetcohesion.mcplugin.events.PlayerChunkChangeEvent;
 import info.projetcohesion.mcplugin.httpserver.Server;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -10,8 +13,16 @@ import java.io.IOException;
  */
 @SuppressWarnings("unused") // This class is loaded by the plugin loader, and is in fact used at runtime
 public class Plugin extends JavaPlugin {
+
+    private static Plugin _plugin;
+
     @Override
     public void onEnable() {
+        _plugin = this;
+
+        registerCommands();
+        registerEvents();
+
         try {
             // Check if ImageMagick is installed
             Process process = Runtime.getRuntime().exec("magick -version");
@@ -30,5 +41,17 @@ public class Plugin extends JavaPlugin {
     @Override
     public void onDisable() {
         Server.stop();
+    }
+
+    public void registerCommands() {
+        this.getCommand("pci").setExecutor(new MainCommand());
+    }
+
+    public void registerEvents() {
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerChunkChangeEvent(), this);
+    }
+
+    public static Plugin getPlugin() {
+        return _plugin;
     }
 }
