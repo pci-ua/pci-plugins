@@ -45,6 +45,17 @@ public class Server {
         }
     }
 
+    /**
+     * Basics sanity checks for the HTTP configuration file.
+     * If the file does not exist, create it with the following default values :
+     * <ul>
+     *     <li>Hostname : <code>localhost</code></li>
+     *     <li>Port : <code>8080</code></li>
+     *     <li>Thread count : Current number of processors</li>
+     * </ul>
+     *
+     * @see Runtime#availableProcessors()
+     */
     private static void checkConfig() {
         if(_config.get().getConfigurationSection("server") == null) {
             _config.get().set("server.hostname", "localhost");
