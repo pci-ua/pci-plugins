@@ -2,7 +2,7 @@ package info.projetcohesion.mcplugin.commands;
 
 import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.SubCommand;
-import info.projetcohesion.mcplugin.managers.FileManager;
+import info.projetcohesion.mcplugin.utils.FileUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -52,7 +52,7 @@ public class ZoneCommand implements SubCommand {
 
     @Override
     public void commandUsage(Player player, String[] args) {
-        FileManager f_man = new FileManager("zones");
+        FileUtils f_man = new FileUtils("zones");
         FileConfiguration file = f_man.get();
 
         String p_uuid = "zones." + player.getUniqueId();

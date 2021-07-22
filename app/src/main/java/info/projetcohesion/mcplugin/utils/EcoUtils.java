@@ -1,19 +1,17 @@
-package info.projetcohesion.mcplugin.managers;
+package info.projetcohesion.mcplugin.utils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
+public class EcoUtils {
 
-public class EcoManager {
-
-    private FileManager _f_man;
+    private FileUtils _f_man;
     private FileConfiguration _file;
 
-    public EcoManager() {
-        this._f_man = new FileManager("money");
+    public EcoUtils() {
+        this._f_man = new FileUtils("money");
         this._file = _f_man.get();
     }
 

@@ -1,6 +1,5 @@
 package info.projetcohesion.mcplugin.utils;
 
-import info.projetcohesion.mcplugin.managers.EcoManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -16,7 +15,7 @@ public class ScoreboardUtils {
 
     public ScoreboardUtils(Player player) {
 
-        EcoManager eco = new EcoManager();
+        EcoUtils eco = new EcoUtils();
 
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard scoreboard = manager.getNewScoreboard();

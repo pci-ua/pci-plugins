@@ -1,9 +1,8 @@
 package info.projetcohesion.mcplugin;
 
-import info.projetcohesion.mcplugin.commands.MainCommand;
 import info.projetcohesion.mcplugin.events.PlayerChunkChangeEvent;
 import info.projetcohesion.mcplugin.events.PlayerServerJoinEvent;
-import info.projetcohesion.mcplugin.managers.CommandManager;
+import info.projetcohesion.mcplugin.utils.CommandManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 

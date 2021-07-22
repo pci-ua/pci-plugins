@@ -1,7 +1,6 @@
 package info.projetcohesion.mcplugin.events;
 
-import info.projetcohesion.mcplugin.managers.EcoManager;
-import info.projetcohesion.mcplugin.managers.FileManager;
+import info.projetcohesion.mcplugin.utils.EcoUtils;
 import info.projetcohesion.mcplugin.utils.ScoreboardUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +11,7 @@ public class PlayerServerJoinEvent implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
 
-        EcoManager file = new EcoManager();
+        EcoUtils file = new EcoUtils();
 
         if (!file.hasAccount(event.getPlayer())) {
             file.newAccount(event.getPlayer());

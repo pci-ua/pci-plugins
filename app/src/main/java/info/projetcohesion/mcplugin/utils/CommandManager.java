@@ -1,4 +1,4 @@
-package info.projetcohesion.mcplugin.managers;
+package info.projetcohesion.mcplugin.utils;
 
 import info.projetcohesion.mcplugin.SubCommand;
 import info.projetcohesion.mcplugin.commands.EcoCommand;
