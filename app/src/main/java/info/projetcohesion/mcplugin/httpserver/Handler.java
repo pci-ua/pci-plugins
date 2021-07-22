@@ -2,6 +2,7 @@ package info.projetcohesion.mcplugin.httpserver;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import info.projetcohesion.mcplugin.commands.MapArtCommand;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -64,9 +65,9 @@ public class Handler implements HttpHandler {
 
             data = Arrays.copyOfRange(data, endHeadersIndex, endFooterIndex-1); // Remove the header and footer
 
-            // TODO Process the data
+            String imageID = MapArtCommand.getImageManager().convertAndAdd(data);
 
-            sendResponse(exchange, "Done", HttpCodes.OK);
+            sendResponse(exchange, imageID, HttpCodes.CREATED);
         } else {
             sendResponse(exchange, "GET is not supported", HttpCodes.METHOD_NOT_ALLOWED);
         }
