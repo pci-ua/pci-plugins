@@ -23,7 +23,7 @@ public class ImageStorageManager {
         Random r = new Random();
 
         while (true) {
-            id = Integer.toString(r.nextInt());
+            id = Integer.toString(r.nextInt(9999));
 
             if (!_storage.containsKey(id)) {
                 return id;
@@ -81,5 +81,14 @@ public class ImageStorageManager {
      */
     public boolean exists(String id) {
         return _storage.containsKey(id);
+    }
+
+    /**
+     * Get the number of images stored.
+     * @return The number of images stored
+     * @see HashMap#size()
+     */
+    public int size() {
+        return _storage.size();
     }
 }
