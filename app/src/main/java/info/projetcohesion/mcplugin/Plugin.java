@@ -14,11 +14,11 @@ import java.io.IOException;
 @SuppressWarnings("unused") // This class is loaded by the plugin loader, and is in fact used at runtime
 public class Plugin extends JavaPlugin {
 
-    private static Plugin _plugin;
+    private static Plugin s_plugin;
 
     @Override
     public void onEnable() {
-        _plugin = this;
+        s_plugin = this;
 
         registerCommands();
         registerEvents();
@@ -52,6 +52,6 @@ public class Plugin extends JavaPlugin {
     }
 
     public static Plugin getPlugin() {
-        return _plugin;
+        return s_plugin;
     }
 }

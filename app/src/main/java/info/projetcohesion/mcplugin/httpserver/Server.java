@@ -12,8 +12,8 @@ import java.util.concurrent.Executors;
  * The integrated HTTP server
  */
 public class Server {
-    private static HttpServer _server;
-    private static FileManager _config = new FileManager("http");
+    private static HttpServer s_server;
+    private static final FileManager s_config = new FileManager("http");
 
     /**
      * Start the integrated HTTP server
@@ -21,15 +21,15 @@ public class Server {
      * @see HttpServer
      */
     public static void start() throws IOException {
-        if(_server == null) { // If the server is already running, do nothing
+        if(s_server == null) { // If the server is already running, do nothing
             checkConfig();
 
-            _server = HttpServer.create(new InetSocketAddress(Objects.requireNonNull(_config.get().getString("server.hostname")), _config.get().getInt("server.port")), 0);
-            _server.createContext("/", new Handler());
-            _server.setExecutor(Executors.newFixedThreadPool(_config.get().getInt("perfs.threads")));
-            _server.start();
+            s_server = HttpServer.create(new InetSocketAddress(Objects.requireNonNull(s_config.get().getString("server.hostname")), s_config.get().getInt("server.port")), 0);
+            s_server.createContext("/", new Handler());
+            s_server.setExecutor(Executors.newFixedThreadPool(s_config.get().getInt("perfs.threads")));
+            s_server.start();
 
-            System.out.println("HTTP server started on " + _server.getAddress().toString());
+            System.out.println("HTTP server started on " + s_server.getAddress().toString());
         }
     }
 
@@ -38,9 +38,9 @@ public class Server {
      * @see HttpServer#stop(int) 
      */
     public static void stop() {
-        if(_server != null) { // Don't stop an already stopped server
-            _server.stop(0); // Stop now
-            _server = null; // Stopped HttpServer objects can't be reused
+        if(s_server != null) { // Don't stop an already stopped server
+            s_server.stop(0); // Stop now
+            s_server = null; // Stopped HttpServer objects can't be reused
             System.out.println("HTTP server stopped");
         }
     }
@@ -57,15 +57,15 @@ public class Server {
      * @see Runtime#availableProcessors()
      */
     private static void checkConfig() {
-        if(_config.get().getConfigurationSection("server") == null) {
-            _config.get().set("server.hostname", "localhost");
-            _config.get().set("server.port", 8080);
-        } if (_config.get().getConfigurationSection("perfs") == null) {
-            _config.get().set("perfs.threads", Runtime.getRuntime().availableProcessors());
+        if(s_config.get().getConfigurationSection("server") == null) {
+            s_config.get().set("server.hostname", "localhost");
+            s_config.get().set("server.port", 8080);
+        } if (s_config.get().getConfigurationSection("perfs") == null) {
+            s_config.get().set("perfs.threads", Runtime.getRuntime().availableProcessors());
 
             System.out.println("Using all " + Runtime.getRuntime().availableProcessors() + " detected CPUs for HTTP traffic handling. You can change this in the config file.");
         }
 
-        _config.save();
+        s_config.save();
     }
 }
