@@ -1,7 +1,7 @@
 package info.projetcohesion.mcplugin.httpserver;
 
 import com.sun.net.httpserver.HttpServer;
-import info.projetcohesion.mcplugin.managers.FileManager;
+import info.projetcohesion.mcplugin.utils.FileUtils;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
  */
 public class Server {
     private static HttpServer s_server;
-    private static final FileManager s_config = new FileManager("http");
+    private static final FileUtils s_config = new FileUtils("http");
 
     /**
      * Start the integrated HTTP server

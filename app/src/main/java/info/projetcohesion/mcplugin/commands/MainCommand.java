@@ -1,7 +1,7 @@
 package info.projetcohesion.mcplugin.commands;
 
 import info.projetcohesion.mcplugin.Plugin;
-import info.projetcohesion.mcplugin.managers.FileManager;
+import info.projetcohesion.mcplugin.utils.FileUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -31,7 +31,7 @@ public class MainCommand implements CommandExecutor {
                 if (args.length == 0) usage(player);
                 else {
                     if (args[0].equalsIgnoreCase("zone")) {
-                        FileManager f_man = new FileManager("zones");
+                        FileUtils f_man = new FileUtils("zones");
                         FileConfiguration file = f_man.get();
 
                         String p_uuid = "zones." + player.getUniqueId();
