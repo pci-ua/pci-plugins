@@ -10,3 +10,7 @@ commands:
     description: Commande principale
     usage: /pci
     permission: pciplugins.main.main
+  mapart:
+    description: Récupère les maparts générés depuis le site web
+    usage: /mapart
+    permission: pciplugins.mapart.mapart

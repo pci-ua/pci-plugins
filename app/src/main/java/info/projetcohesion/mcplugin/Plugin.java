@@ -1,6 +1,7 @@
 package info.projetcohesion.mcplugin;
 
 import info.projetcohesion.mcplugin.commands.MainCommand;
+import info.projetcohesion.mcplugin.commands.MapArtCommand;
 import info.projetcohesion.mcplugin.events.PlayerChunkChangeEvent;
 import info.projetcohesion.mcplugin.httpserver.Server;
 import org.bukkit.Bukkit;
@@ -45,6 +46,7 @@ public class Plugin extends JavaPlugin {
 
     public void registerCommands() {
         this.getCommand("pci").setExecutor(new MainCommand());
+        this.getCommand("mapart").setExecutor(new MapArtCommand());
     }
 
     public void registerEvents() {
