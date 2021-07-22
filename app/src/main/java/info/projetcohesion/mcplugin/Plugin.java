@@ -44,7 +44,6 @@ public class Plugin extends JavaPlugin {
     }
 
     public void registerCommands() {
-        this.getCommand("mapart").setExecutor(new MapArtCommand());
         this.getCommand("pci").setExecutor(new CommandManager());
     }
 

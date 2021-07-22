@@ -1,27 +1,24 @@
 package info.projetcohesion.mcplugin.commands;
 
+import info.projetcohesion.mcplugin.SubCommand;
 import info.projetcohesion.mcplugin.managers.ImageStorageManager;
+import info.projetcohesion.mcplugin.map.ImageMapRenderer;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
 
-public class MapArtCommand implements CommandExecutor {
+import java.util.HashMap;
+import java.util.Map;
+
+public class MapArtCommand implements SubCommand {
     private static ImageStorageManager s_storage = new ImageStorageManager();
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(label.equalsIgnoreCase("mapart")) {
-            if(args.length == 0) {
-                sender.sendMessage("Il y a actuellement " + s_storage.size() + " image(s) en attente.");
-            } else if(args.length == 1 && args[0].equalsIgnoreCase("clear") && sender instanceof ConsoleCommandSender) { // "/mapart clear" only from the console
-                s_storage = new ImageStorageManager();
-                sender.sendMessage("Cleared.");
-            } // TODO implement the rest of the command
-            return true;
-        }
-        return false;
-    }
 
     /**
      * Get the ImageStorageManager used to manage images within this command.
@@ -30,5 +27,62 @@ public class MapArtCommand implements CommandExecutor {
      */
     public static ImageStorageManager getImageManager() {
         return s_storage;
+    }
+
+    @Override
+    public String getName() {
+        return "mapart";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Récupère les maparts envoyés sur le site web.";
+    }
+
+    @Override
+    public Map<String, String> getUsage() {
+        HashMap<String, String> usage = new HashMap<>();
+        usage.put("/pci mapart", "Affiche le nombre d'images en attente");
+        usage.put("/pci mapart clear", "Vide les images en attente");
+
+        return usage;
+    }
+
+    @Override
+    public Map<String, String> getPermissions() {
+        HashMap<String, String> perms = new HashMap<>();
+        perms.put("/pci mapart", "");
+        perms.put("/pci mapart clear", "pci.mapart.clear");
+
+        return perms;
+    }
+
+    @Override
+    public void commandUsage(Player player, String[] args) {
+        if(args.length == 1) { // /pci mapart
+            player.sendMessage("Il y a actuellement " + s_storage.size() + " image(s) en attente.");
+        } else if(args.length == 2 && args[1].equalsIgnoreCase("clear") && player.isOp()) { // /pci mapart clear
+            s_storage = new ImageStorageManager();
+            player.sendMessage("Vidé.");
+        } else if(args.length == 2 && args[1].equalsIgnoreCase("get")) { // /pci mapart get
+            player.sendMessage("ID manquant");
+        } else if(args.length == 3 && args[1].equalsIgnoreCase("get")) { // /pci mapart get <id>
+            if (s_storage.exists(args[2])) {
+                // TODO currently broken
+                MapView map = Bukkit.createMap(player.getWorld());
+
+                for (MapRenderer r : map.getRenderers()) {
+                    map.removeRenderer(r);
+                }
+
+                map.addRenderer(new ImageMapRenderer(args[2]));
+
+                player.getInventory().addItem(new ItemStack(Material.MAP));
+
+                player.sendMessage("Vérifiez votre inventaire !");
+            } else {
+                player.sendMessage("ID inexistant.");
+            }
+        }
     }
 }
