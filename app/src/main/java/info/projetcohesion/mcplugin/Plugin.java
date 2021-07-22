@@ -1,7 +1,8 @@
 package info.projetcohesion.mcplugin;
 
-import info.projetcohesion.mcplugin.commands.MainCommand;
 import info.projetcohesion.mcplugin.events.PlayerChunkChangeEvent;
+import info.projetcohesion.mcplugin.events.PlayerServerJoinEvent;
+import info.projetcohesion.mcplugin.utils.CommandManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,11 +26,14 @@ public class Plugin extends JavaPlugin {
     }
 
     public void registerCommands() {
-        this.getCommand("pci").setExecutor(new MainCommand());
+        // this.getCommand("pci").setExecutor(new MainCommand());
+        this.getCommand("pci").setExecutor(new CommandManager());
     }
 
     public void registerEvents() {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerChunkChangeEvent(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerServerJoinEvent(), this);
+
     }
 
     public static Plugin getPlugin() {

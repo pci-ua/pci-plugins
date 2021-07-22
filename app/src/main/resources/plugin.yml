@@ -9,4 +9,3 @@ commands:
   pci:
     description: Commande principale
     usage: /pci
-    permission: pciplugins.main.main

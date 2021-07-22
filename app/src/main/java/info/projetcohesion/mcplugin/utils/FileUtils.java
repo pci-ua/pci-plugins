@@ -1,4 +1,4 @@
-package info.projetcohesion.mcplugin.managers;
+package info.projetcohesion.mcplugin.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -7,13 +7,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
-public class FileManager {
+public class FileUtils {
 
     private File _file;
     private FileConfiguration _customFile;
     private String _fileName;
 
-    public FileManager (String fileName) {
+    public FileUtils(String fileName) {
         this._fileName = fileName;
 
         this.setup();
