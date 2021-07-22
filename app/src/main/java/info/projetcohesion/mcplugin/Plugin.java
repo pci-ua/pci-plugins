@@ -4,6 +4,7 @@ import info.projetcohesion.mcplugin.commands.MainCommand;
 import info.projetcohesion.mcplugin.commands.MapArtCommand;
 import info.projetcohesion.mcplugin.events.PlayerChunkChangeEvent;
 import info.projetcohesion.mcplugin.httpserver.Server;
+import info.projetcohesion.mcplugin.utils.ImageMagick;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,18 +25,15 @@ public class Plugin extends JavaPlugin {
         registerCommands();
         registerEvents();
 
-        try {
-            // Check if ImageMagick is installed
-            Process process = Runtime.getRuntime().exec("magick -version");
-            process.waitFor();
-            if(process.exitValue() == 0) { // If ImageMagick is not installed, the exit value will not be 0
+        if(ImageMagick.isWorking()) {
+            try {
                 Server.start();
-            } else {
-                System.err.println("ImageMagick is not installed, is not on PATH or does not work.");
+            } catch (IOException e) {
+                System.err.println("Failed to boot the integrated HTTP server !");
+                e.printStackTrace();
             }
-        } catch (IOException | InterruptedException e) {
-            System.err.println("Failed to boot the integrated HTTP server !");
-            e.printStackTrace();
+        } else {
+            System.err.println("ImageMagick is not working. Check your PATH for a working magick binary.");
         }
     }
 
