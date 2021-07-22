@@ -1,6 +1,6 @@
 package info.projetcohesion.mcplugin.events;
 
-import info.projetcohesion.mcplugin.managers.FileManager;
+import info.projetcohesion.mcplugin.utils.FileUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class PlayerChunkChangeEvent implements Listener {
 
-    private final FileManager file = new FileManager("zones");
+    private final FileUtils file = new FileUtils("zones");
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onBuild(BlockPlaceEvent event) {
