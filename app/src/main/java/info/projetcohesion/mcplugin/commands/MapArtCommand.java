@@ -1,18 +1,11 @@
 package info.projetcohesion.mcplugin.commands;
 
 import info.projetcohesion.mcplugin.SubCommand;
+import info.projetcohesion.mcplugin.events.MapInitEvent;
 import info.projetcohesion.mcplugin.managers.ImageStorageManager;
-import info.projetcohesion.mcplugin.map.ImageMapRenderer;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.map.MapRenderer;
-import org.bukkit.map.MapView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,18 +61,11 @@ public class MapArtCommand implements SubCommand {
             player.sendMessage("ID manquant");
         } else if(args.length == 3 && args[1].equalsIgnoreCase("get")) { // /pci mapart get <id>
             if (s_storage.exists(args[2])) {
-                // TODO currently broken
-                MapView map = Bukkit.createMap(player.getWorld());
-
-                for (MapRenderer r : map.getRenderers()) {
-                    map.removeRenderer(r);
-                }
-
-                map.addRenderer(new ImageMapRenderer(args[2]));
+                MapInitEvent.setWipId(args[2]);
 
                 player.getInventory().addItem(new ItemStack(Material.MAP));
 
-                player.sendMessage("Vérifiez votre inventaire !");
+                player.sendMessage("Ouvrez une nouvelle carte pour admirer le résultat !");
             } else {
                 player.sendMessage("ID inexistant.");
             }

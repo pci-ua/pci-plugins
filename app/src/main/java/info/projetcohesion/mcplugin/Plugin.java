@@ -1,6 +1,6 @@
 package info.projetcohesion.mcplugin;
 
-import info.projetcohesion.mcplugin.commands.MapArtCommand;
+import info.projetcohesion.mcplugin.events.MapInitEvent;
 import info.projetcohesion.mcplugin.events.PlayerChunkChangeEvent;
 import info.projetcohesion.mcplugin.events.PlayerServerJoinEvent;
 import info.projetcohesion.mcplugin.httpserver.Server;
@@ -50,7 +50,7 @@ public class Plugin extends JavaPlugin {
     public void registerEvents() {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerChunkChangeEvent(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerServerJoinEvent(), this);
-
+        Bukkit.getServer().getPluginManager().registerEvents(new MapInitEvent(), this);
     }
 
     public static Plugin getPlugin() {
