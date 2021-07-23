@@ -19,7 +19,7 @@ public class ImageMagick {
      * @see Runtime#exec(String)
      * @see ImageIO#read(InputStream)
      */
-    public static Image command(String cmd, byte[] data) throws IOException {
+    public static byte[] command(String cmd, byte[] data) throws IOException {
         cmd = "magick " + cmd;
 
         Process im = Runtime.getRuntime().exec(cmd);
@@ -27,7 +27,10 @@ public class ImageMagick {
         im.getOutputStream().flush();
         im.getOutputStream().close();
 
-        return ImageIO.read(im.getInputStream());
+        byte[] out = im.getInputStream().readAllBytes();
+        im.getInputStream().close();
+
+        return out;
     }
 
     /**

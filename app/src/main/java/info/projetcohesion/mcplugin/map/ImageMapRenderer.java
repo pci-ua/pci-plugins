@@ -7,6 +7,7 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class ImageMapRenderer extends MapRenderer {
     private final String _id;
@@ -21,8 +22,13 @@ public class ImageMapRenderer extends MapRenderer {
         if (!_done) {
             map.setScale(MapView.Scale.NORMAL);
 
-            BufferedImage img = (BufferedImage) MapArtCommand.getImageManager().get(_id);
-            canvas.drawImage(0, 0, img);
+            try {
+                BufferedImage img = (BufferedImage) MapArtCommand.getImageManager().get(_id);
+                canvas.drawImage(0, 0, img);
+            } catch (IOException e) {
+                player.sendMessage("Failed to generate the image !");
+                e.printStackTrace();
+            }
 
             map.setLocked(true);
             map.setTrackingPosition(false);
