@@ -61,7 +61,7 @@ public class MapArtCommand implements SubCommand {
             player.sendMessage("ID manquant");
         } else if(args.length == 3 && args[1].equalsIgnoreCase("get")) { // /pci mapart get <id>
             if (s_storage.exists(args[2])) {
-                MapInitEvent.setWipId(args[2]);
+                MapInitEvent.setWipId(args[2]); // Set the working id for the next map
 
                 player.getInventory().addItem(new ItemStack(Material.MAP));
 

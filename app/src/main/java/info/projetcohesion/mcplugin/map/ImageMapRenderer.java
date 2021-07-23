@@ -9,17 +9,25 @@ import org.bukkit.map.MapView;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+/**
+ * A map renderer, capable of rendering images.
+ * @see MapRenderer
+ */
 public class ImageMapRenderer extends MapRenderer {
     private final String _id;
     private boolean _done = false;
 
+    /**
+     * Create a ImageMapRenderer object linked to an image ID
+     * @param id The image ID to use
+     */
     public ImageMapRenderer(String id) {
         this._id = id;
     }
 
     @Override
     public void render(MapView map, MapCanvas canvas, Player player) {
-        if (!_done) {
+        if (!_done) { // Draw only once
             map.setScale(MapView.Scale.NORMAL);
 
             try {

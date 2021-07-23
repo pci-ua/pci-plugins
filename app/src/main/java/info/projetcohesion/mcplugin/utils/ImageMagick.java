@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * An helper for using the ImageMagick CLI
+ * An helper for the ImageMagick CLI
  */
 public class ImageMagick {
 
     /**
-     * Run a command through ImageMagick CLI.
+     * Run a command through the ImageMagick CLI.
      * @param cmd The command, without the <code>"magick "</code> prefix.
      * @param data The data to send to ImageMagick through the standard input.
      * @return An Image object

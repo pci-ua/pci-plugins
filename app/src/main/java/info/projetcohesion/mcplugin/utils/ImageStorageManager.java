@@ -8,7 +8,9 @@ import java.io.*;
 import java.util.Random;
 
 /**
- * Store images with random IDs for future reference.
+ * Save images on disk with random IDs for future reference.
+ * The images are saved on disk (in BMP format) in the <code>images</code> folder in the plugin data folder,
+ * and named with their ID
  */
 public class ImageStorageManager implements Serializable {
     private final File _imgDir = new File(Plugin.getPlugin().getDataFolder(), "images/");
