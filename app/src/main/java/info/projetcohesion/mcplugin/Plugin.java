@@ -18,6 +18,7 @@ import java.io.IOException;
 public class Plugin extends JavaPlugin {
 
     private static Plugin s_plugin;
+    private CommandManager _commandManager;
 
     @Override
     public void onEnable() {
@@ -44,7 +45,8 @@ public class Plugin extends JavaPlugin {
     }
 
     public void registerCommands() {
-        this.getCommand("pci").setExecutor(new CommandManager());
+        _commandManager = new CommandManager();
+        this.getCommand("pci").setExecutor(_commandManager);
     }
 
     public void registerEvents() {
@@ -55,5 +57,9 @@ public class Plugin extends JavaPlugin {
 
     public static Plugin getPlugin() {
         return s_plugin;
+    }
+
+    public CommandManager getCommandManager() {
+        return _commandManager;
     }
 }
