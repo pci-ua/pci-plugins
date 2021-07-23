@@ -3,6 +3,7 @@ package info.projetcohesion.mcplugin.commands;
 import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.SubCommand;
 import info.projetcohesion.mcplugin.utils.FileUtils;
+import info.projetcohesion.mcplugin.utils.GUIUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -54,8 +55,25 @@ public class ZoneCommand implements SubCommand {
     public void commandUsage(Player player, String[] args) {
         FileUtils f_man = new FileUtils("zones");
         FileConfiguration file = f_man.get();
+        FileUtils f_man_s = new FileUtils("shop");
+        FileConfiguration file_s = f_man_s.get();
 
         String p_uuid = "zones." + player.getUniqueId();
+
+        if (args.length == 1) {
+            GUIUtils gui = new GUIUtils(player, 27, "Gestion de zone");
+            String actif = ChatColor.GREEN + "Activé", desactif = ChatColor.RED + "Desactivé";
+
+            if (file_s.getStringList("shop.purchased." + player.getUniqueId()).contains("pvp")) gui.addItem("pvp", Material.PLAYER_HEAD, "Gestion du PvP", 3, Arrays.asList("Activez/Désactivez le PvP dans vos zones.", " ",
+                    file.getStringList("zones." + player.getUniqueId() + ".effects").contains("pvp") ? actif : desactif));
+            if (file_s.getStringList("shop.purchased." + player.getUniqueId()).contains("pve")) gui.addItem("pve", Material.ZOMBIE_HEAD, "Gestion du PvE", 4, Arrays.asList("Activez/Désactivez le PvE dans vos zones.", " ",
+                    file.getStringList("zones." + player.getUniqueId() + ".effects").contains("pve") ? actif : desactif));
+            if (file_s.getStringList("shop.purchased." + player.getUniqueId()).contains("nat")) gui.addItem("nat", Material.FIRE_CHARGE, "Gestion de la nature", 5, Arrays.asList("Activez/Désactivez les dégâts naturels dans votre zone.", " ",
+                    file.getStringList("zones." + player.getUniqueId() + ".effects").contains("nat") ? actif : desactif));
+
+            gui.openInventory(player);
+            return;
+        }
 
         if (args[1].equalsIgnoreCase("claim")
                 && args.length == 2) {

@@ -1,5 +1,7 @@
 package info.projetcohesion.mcplugin;
 
+import info.projetcohesion.mcplugin.events.ChunkDamageEvent;
+import info.projetcohesion.mcplugin.events.FancyInventoryEvent;
 import info.projetcohesion.mcplugin.events.PlayerChunkChangeEvent;
 import info.projetcohesion.mcplugin.events.PlayerServerJoinEvent;
 import info.projetcohesion.mcplugin.utils.CommandManager;
@@ -33,7 +35,8 @@ public class Plugin extends JavaPlugin {
     public void registerEvents() {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerChunkChangeEvent(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerServerJoinEvent(), this);
-
+        Bukkit.getServer().getPluginManager().registerEvents(new FancyInventoryEvent(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new ChunkDamageEvent(), this);
     }
 
     public static Plugin getPlugin() {

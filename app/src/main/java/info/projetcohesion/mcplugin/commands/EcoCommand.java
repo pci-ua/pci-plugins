@@ -70,8 +70,7 @@ public class EcoCommand implements SubCommand {
                     && pl.hasPlayedBefore())
                 if (NumberUtils.isDigits(args[3])) {
                     eco.setAccountBalance(pl, eco.getAccountBalance(pl) + Integer.parseInt(args[3]));
-                    f_man.save();
-                    file.options().copyDefaults(true);
+                    eco.save();
                 } else player.sendMessage(ChatColor.RED + "ERROR: Le montant est invalide.");
             else player.sendMessage(ChatColor.RED + "ERROR: Le joueur est inaccessible");
 
@@ -85,8 +84,7 @@ public class EcoCommand implements SubCommand {
                 if (NumberUtils.isDigits(args[3]))
                     if (eco.getAccountBalance(pl) - Integer.parseInt(args[3]) >= 0) {
                         eco.setAccountBalance(pl, eco.getAccountBalance(pl) - Integer.parseInt(args[3]));
-                        f_man.save();
-                        file.options().copyDefaults(true);
+                        eco.save();
                     } else eco.setAccountBalance(pl, 0);
                 else player.sendMessage(ChatColor.RED + "ERROR: Le montant est invalide.");
             else player.sendMessage(ChatColor.RED + "ERROR: Le joueur est inaccessible");
@@ -99,8 +97,7 @@ public class EcoCommand implements SubCommand {
                     && pl.hasPlayedBefore())
                 if (NumberUtils.isDigits(args[3])) {
                     eco.transfer(player, pl, Integer.parseInt(args[3]));
-                    f_man.save();
-                    file.options().copyDefaults(true);
+                    eco.save();
                 } else player.sendMessage(ChatColor.RED + "ERROR: Le montant est invalide.");
             else player.sendMessage(ChatColor.RED + "ERROR: Le joueur est inaccessible");
 
@@ -139,6 +136,7 @@ public class EcoCommand implements SubCommand {
         // Ne semble pas sauvegarder correectement si mis ici.
         // f_man.save();
         // file.options().copyDefaults(true);
+
 
     }
 }

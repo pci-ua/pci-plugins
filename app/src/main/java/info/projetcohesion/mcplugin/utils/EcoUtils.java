@@ -21,6 +21,14 @@ public class EcoUtils {
 
     public void setAccountBalance(OfflinePlayer player, int amount) {
         _file.set("accounts." + player.getUniqueId(), amount);
+        save();
+        if (player.isOnline()) new ScoreboardUtils((Player) player).setPlayerScoreboard((Player) player);
+    }
+
+    public void pay(OfflinePlayer player, int amount) {
+        _file.set("accounts." + player.getUniqueId(), getAccountBalance(player) - amount);
+        save();
+        if (player.isOnline()) new ScoreboardUtils((Player) player).setPlayerScoreboard((Player) player);
     }
 
     public boolean hasAccount(OfflinePlayer player) {
@@ -35,6 +43,9 @@ public class EcoUtils {
         if (getAccountBalance(player) >= amount) {
             _file.set("accounts." + player.getUniqueId(), getAccountBalance(player) - amount);
             _file.set("accounts." + target.getUniqueId(), getAccountBalance(target) + amount);
+            save();
+            new ScoreboardUtils(player).setPlayerScoreboard(player);
+            if (target.isOnline()) new ScoreboardUtils((Player) target).setPlayerScoreboard((Player) target);;
         } else player.sendMessage(ChatColor.RED + "ERROR: Vous n'avez pas assez sur votre compte.");
     }
 
