@@ -29,9 +29,9 @@ public class MapInitEvent implements Listener {
 
     /**
      * Set the ID for the next generated map art.
-     * @param s_wipId The ID to use.
+     * @param wipId The ID to use.
      */
-    public static void setWipId(String s_wipId) {
-        MapInitEvent.s_wipId = s_wipId;
+    public static void setWipId(String wipId) {
+        MapInitEvent.s_wipId = wipId;
     }
 }
