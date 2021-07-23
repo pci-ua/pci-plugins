@@ -55,7 +55,7 @@ public class MapArtCommand implements SubCommand {
         if(args.length == 1) { // /pci mapart
             player.sendMessage("Il y a actuellement " + s_storage.size() + " image(s) en attente.");
         } else if(args.length == 2 && args[1].equalsIgnoreCase("clear") && player.isOp()) { // /pci mapart clear
-            s_storage = new ImageStorageManager();
+            s_storage.clean();
             player.sendMessage("Vidé.");
         } else if(args.length == 2 && args[1].equalsIgnoreCase("get")) { // /pci mapart get
             player.sendMessage("ID manquant");

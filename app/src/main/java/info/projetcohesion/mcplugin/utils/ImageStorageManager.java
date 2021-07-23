@@ -87,6 +87,15 @@ public class ImageStorageManager implements Serializable {
     }
 
     /**
+     * Delete the saved files
+     */
+    public void clean() {
+        for (File file : _imgDir.listFiles()) {
+            file.delete();
+        }
+    }
+
+    /**
      * Check if this ID is used
      * @param id The ID to check against
      * @return If the ID is already used or not
