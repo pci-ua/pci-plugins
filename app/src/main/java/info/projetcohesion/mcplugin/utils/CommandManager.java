@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class CommandManager implements CommandExecutor {
 
-    private ArrayList<SubCommand> subcommands = new ArrayList<>();
+    private final ArrayList<SubCommand> subcommands = new ArrayList<>();
 
     public CommandManager(){
         subcommands.add(new ZoneCommand());
@@ -25,7 +25,6 @@ public class CommandManager implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
         if (sender instanceof Player){
             Player p = (Player) sender;
 
