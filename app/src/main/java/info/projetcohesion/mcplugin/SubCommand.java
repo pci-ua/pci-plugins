@@ -12,5 +12,4 @@ public interface SubCommand {
     Map<String, String> getUsage();
     Map<String, String> getPermissions(); //TODO: Revoir la façon de gérer les permissions
     void commandUsage(Player player, String args[]);
-
 }
