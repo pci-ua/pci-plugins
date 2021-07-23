@@ -2,7 +2,7 @@ package info.projetcohesion.mcplugin.commands;
 
 import info.projetcohesion.mcplugin.SubCommand;
 import info.projetcohesion.mcplugin.events.MapInitEvent;
-import info.projetcohesion.mcplugin.managers.ImageStorageManager;
+import info.projetcohesion.mcplugin.utils.ImageStorageManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
