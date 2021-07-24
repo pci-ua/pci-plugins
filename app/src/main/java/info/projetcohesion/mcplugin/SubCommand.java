@@ -36,5 +36,4 @@ public interface SubCommand {
      * @param args Sub-command arguments
      */
     void commandUsage(Player player, String args[]);
-
 }

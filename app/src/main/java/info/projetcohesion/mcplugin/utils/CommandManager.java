@@ -3,6 +3,7 @@ package info.projetcohesion.mcplugin.utils;
 import info.projetcohesion.mcplugin.SubCommand;
 import info.projetcohesion.mcplugin.commands.EcoCommand;
 import info.projetcohesion.mcplugin.commands.ShopCommand;
+import info.projetcohesion.mcplugin.commands.MapArtCommand;
 import info.projetcohesion.mcplugin.commands.ZoneCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -32,6 +33,7 @@ public class CommandManager implements CommandExecutor {
         subcommands.add(new ZoneCommand());
         subcommands.add(new EcoCommand());
         subcommands.add(new ShopCommand());
+        subcommands.add(new MapArtCommand());
     }
 
     @Override
