@@ -27,6 +27,7 @@ public class FileUtils {
                 _file.createNewFile();
             }catch (IOException e){
                 System.err.println("FileManager: Couldn't create file.");
+                e.printStackTrace();
             }
         }
         this._customFile = YamlConfiguration.loadConfiguration(_file);
@@ -41,6 +42,7 @@ public class FileUtils {
             this._customFile.save(this._file);
         }catch (IOException e){
             System.err.println("FileManager: Couldn't save file.");
+            e.printStackTrace();
         }
     }
 
