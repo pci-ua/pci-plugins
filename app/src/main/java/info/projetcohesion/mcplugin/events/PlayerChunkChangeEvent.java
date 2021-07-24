@@ -13,18 +13,36 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.Objects;
 
+/**
+ * PlayerChunkChangeEvent.java
+ * <p>
+ * Implements Listener.java.
+ * Used to control the events after the player changes chunk.
+ *
+ * @author Jack Hogg
+ */
 public class PlayerChunkChangeEvent implements Listener {
 
     private final FileUtils file = new FileUtils("zones");
 
+    /**
+     * Handling of the player changing chunk
+     *
+     * @param event Event handled
+     */
     @EventHandler(priority = EventPriority.HIGH)
     public void onBuild(PlayerMoveEvent event) {
         // Modifier le scoreboard
-        if (!event.getFrom().getChunk().equals(Objects.requireNonNull(event.getTo()).getChunk())) {
+        if (!event.getFrom().getChunk().equals(Objects.requireNonNull(event.getTo()).getChunk()))
             new ScoreboardUtils(event.getPlayer()).setPlayerScoreboard(event.getPlayer());
-        }
+
     }
 
+    /**
+     * Handling of the player placing a block
+     *
+     * @param event Event handled
+     */
     @EventHandler(priority = EventPriority.HIGH)
     public void onBuild(BlockPlaceEvent event) {
         Block block = event.getBlock();
@@ -48,6 +66,11 @@ public class PlayerChunkChangeEvent implements Listener {
                     }
     }
 
+    /**
+     * Handling of the player breaking a block
+     *
+     * @param event Event handled
+     */
     @EventHandler(priority = EventPriority.HIGH)
     public void onBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
@@ -70,6 +93,4 @@ public class PlayerChunkChangeEvent implements Listener {
 
                     }
     }
-
-
 }

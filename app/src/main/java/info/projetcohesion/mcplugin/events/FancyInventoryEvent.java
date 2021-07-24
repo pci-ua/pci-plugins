@@ -17,8 +17,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * FancyInventoryEvent.java
+ * <p>
+ * Implements Listener.java.
+ * Used to control the events after the player clicks on an item
+ * in a specific personalised inventory.
+ *
+ * @author Jack Hogg
+ */
 public class FancyInventoryEvent implements Listener {
 
+    /**
+     * General handling of the clicks.
+     *
+     * @param e Event handled
+     */
     @EventHandler
     public void onMenuClick(InventoryClickEvent e) {
 
@@ -27,12 +41,16 @@ public class FancyInventoryEvent implements Listener {
                 + "i" + net.md_5.bungee.api.ChatColor.of("#007f7f") + "] "))
             e.setCancelled(true);
 
-        if (Objects.requireNonNull(e.getCurrentItem()).getType().equals(Material.BARRIER)) {
+        if (Objects.requireNonNull(e.getCurrentItem()).getType().equals(Material.BARRIER))
             e.getWhoClicked().closeInventory();
-        }
 
     }
 
+    /**
+     * Handling of the clicks on the shop inventory.
+     *
+     * @param e Event handled
+     */
     @EventHandler
     public void onShopPurchase(InventoryClickEvent e) {
         FileUtils f_man = new FileUtils("shop");
@@ -57,6 +75,7 @@ public class FancyInventoryEvent implements Listener {
                 List<String> lore = meta.getLore();
 
                 assert lore != null;
+                lore.remove(lore.size() - 1);
                 lore.add(ChatColor.RED + "ACHETE");
 
                 meta.setLore(lore);
@@ -79,7 +98,11 @@ public class FancyInventoryEvent implements Listener {
         }
     }
 
-
+    /**
+     * Handling of the clicks on the zone inventory that handle zone effects.
+     *
+     * @param e Event handled
+     */
     @EventHandler
     public void onZoneChange(InventoryClickEvent e) {
         FileUtils f_man = new FileUtils("zones");

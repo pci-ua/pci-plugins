@@ -1,6 +1,5 @@
 package info.projetcohesion.mcplugin.utils;
 
-import info.projetcohesion.mcplugin.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,10 +11,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * GUIUtils.java
+ * <p>
+ * Manages the GUI (Inventory) system.
+ *
+ * @author Jack Hogg
+ */
 public class GUIUtils {
 
     private final Inventory _inv;
@@ -23,6 +28,13 @@ public class GUIUtils {
     private static final HashMap<Integer, String> s_items = new HashMap<>();
     private static final HashMap<Integer, Integer> s_prices = new HashMap<>();
 
+    /**
+     * GUIUtils constructor
+     *
+     * @param player Owner of the GUI
+     * @param size   Size of the GUI
+     * @param title  Title of the GUI
+     */
     public GUIUtils(Player player, int size, String title) {
 
         assert size % 9 == 0;
@@ -41,6 +53,15 @@ public class GUIUtils {
         addPlayerSkull(player, size - 9);
     }
 
+    /**
+     * Add an item to the GUI.
+     *
+     * @param id   Custom ID of the Item
+     * @param mat  Material of the item
+     * @param desc DisplayName of the item
+     * @param slot Slot of the item
+     * @param lore Lore of the item
+     */
     public void addItem(String id, Material mat, String desc, int slot, List<String> lore) {
         if (id != null) s_items.put(slot, id);
 
@@ -56,6 +77,17 @@ public class GUIUtils {
         this._inv.setItem(slot, item);
     }
 
+    /**
+     * Add an item with a price to the GUI.
+     *
+     * @param id     Custom ID of the Item
+     * @param mat    Material of the item
+     * @param desc   DisplayName of the item
+     * @param slot   Slot of the item
+     * @param price  Price of the item
+     * @param lore   Lore of the item
+     * @param bought Says if the item has been bought
+     */
     public void addItemWithPrice(String id, Material mat, String desc, int slot, int price, List<String> lore, boolean bought) {
         assert price >= 0;
 
@@ -75,6 +107,12 @@ public class GUIUtils {
         s_prices.put(slot, price);
     }
 
+    /**
+     * Adds a player's skull to the GUI
+     *
+     * @param player Player
+     * @param slot   Slot of the skull
+     */
     public void addPlayerSkull(Player player, int slot) {
         FileUtils f_man = new FileUtils("money");
         FileConfiguration file = f_man.get();
@@ -101,14 +139,29 @@ public class GUIUtils {
         this._inv.setItem(slot, item);
     }
 
+    /**
+     * Open a GUI
+     *
+     * @param player Player
+     */
     public void openInventory(Player player) {
         player.openInventory(this._inv);
     }
 
+    /**
+     * Get's the items according to their slot.
+     *
+     * @return pairs of keys of slots and values of item id's
+     */
     public static HashMap<Integer, String> getItems() {
         return s_items;
     }
 
+    /**
+     * Get's the items' price's according to their slot.
+     *
+     * @return pairs of keys of slots and values of prices
+     */
     public static HashMap<Integer, Integer> getPrices() {
         return s_prices;
     }

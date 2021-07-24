@@ -10,10 +10,22 @@ import org.bukkit.scoreboard.*;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * ScoreboardUtils.java
+ * <p>
+ * Manages the Scoreboard.
+ *
+ * @author Jack Hogg
+ */
 public class ScoreboardUtils {
 
     private final Scoreboard _scoreboard;
 
+    /**
+     * ScoreboardUtils constructor
+     *
+     * @param player Player
+     */
     public ScoreboardUtils(Player player) {
 
         EcoUtils eco = new EcoUtils();
@@ -47,8 +59,6 @@ public class ScoreboardUtils {
                         else
                             s3.set(objective.getScore(ChatColor.GOLD + "Chunk : " + ChatColor.RED + Objects.requireNonNull(Bukkit.getPlayer(local)).getName()));
 
-                        if (player.isOnline()) player.sendMessage("Coords: " + file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".x") + " " + file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".z"));
-
                         return;
                     }
             });
@@ -66,6 +76,11 @@ public class ScoreboardUtils {
         this._scoreboard = scoreboard;
     }
 
+    /**
+     * Set a player's scoreboard
+     *
+     * @param player Player
+     */
     public void setPlayerScoreboard(Player player) {
         player.setScoreboard(this._scoreboard);
     }

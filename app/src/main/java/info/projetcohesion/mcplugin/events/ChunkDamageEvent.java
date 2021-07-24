@@ -4,7 +4,6 @@ import info.projetcohesion.mcplugin.utils.FileUtils;
 import org.bukkit.Chunk;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,39 +14,61 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * ChunkDamageEvent.java
+ * <p>
+ * Implements Listener.java.
+ * Used to control the damage dealt by other sources depending on
+ * the player's unlocked effects.
+ *
+ * @author Jack Hogg
+ */
 public class ChunkDamageEvent implements Listener {
 
+    /**
+     * Controls the damage inflicted by another entity source
+     * depending on the player's unlocked effects.
+     *
+     * @param event Event handled
+     */
     @EventHandler
     public void onDamageByEntity(EntityDamageByEntityEvent event) {
 
         if (event.getEntity() instanceof Player player) {
-            if (event.getDamager() instanceof LivingEntity
-                    && effectActivated(player, "pve")) {
-                player.sendMessage("PVE");
+            if ((event.getDamager() instanceof LivingEntity
+                    && effectActivated(player, "pve"))
+                    || event.getCause().equals(DamageCause.PROJECTILE))
                 event.setCancelled(true);
-            }
 
             else if (event.getDamager() instanceof Player
-                    && effectActivated(player, "pvp")) {
-                player.sendMessage("pvp");
+                    && effectActivated(player, "pvp"))
                 event.setCancelled(true);
-            }
+
         }
     }
 
+    /**
+     * Controls the damage inflicted by some certain natural source like fire,
+     * a fall or poison depending on the player's unlocked effects.
+     *
+     * @param event Event handled
+     */
     @EventHandler
     public void onDamageByNature(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player
-                && !event.getCause().equals(DamageCause.ENTITY_ATTACK)) {
-            if (getBlacklist().contains(event.getCause())
-                    && effectActivated(player, "nat")) {
-                player.sendMessage("NATURE IS COMING");
+                && !event.getCause().equals(DamageCause.ENTITY_ATTACK))
+            if (getWhiteList().contains(event.getCause())
+                    && effectActivated(player, "nat"))
                 event.setCancelled(true);
-            }
-        }
+
     }
 
-    public ArrayList<DamageCause> getBlacklist() {
+    /**
+     * Gets a list of different natural causes that are to be taken into consideration.
+     *
+     * @return a list of DamageCause used in these events.
+     */
+    public ArrayList<DamageCause> getWhiteList() {
         ArrayList<DamageCause> liste = new ArrayList<>();
 
         liste.add(DamageCause.BLOCK_EXPLOSION);
@@ -64,6 +85,13 @@ public class ChunkDamageEvent implements Listener {
         return liste;
     }
 
+    /**
+     * Check if a player has unlocked a certain effect
+     *
+     * @param player Player to check
+     * @param id     ID of the effect
+     * @return <code>true</code> if the player has unlocked the effect, <code>false</code> otherwise.
+     */
     public boolean effectActivated(Player player, String id) {
         FileUtils f_man = new FileUtils("zones");
         FileConfiguration file = f_man.get();

@@ -1,7 +1,6 @@
 package info.projetcohesion.mcplugin.commands;
 
 import info.projetcohesion.mcplugin.SubCommand;
-import info.projetcohesion.mcplugin.utils.EcoUtils;
 import info.projetcohesion.mcplugin.utils.FileUtils;
 import info.projetcohesion.mcplugin.utils.GUIUtils;
 import org.bukkit.ChatColor;
@@ -10,10 +9,17 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * ShopCommand.java
+ * <p>
+ * Implements SubCommand.java and it's methods.
+ * Used to open the shop GUI.
+ *
+ * @author Jack Hogg
+ */
 public class ShopCommand implements SubCommand {
 
     @Override
