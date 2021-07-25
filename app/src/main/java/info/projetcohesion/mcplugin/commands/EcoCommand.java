@@ -6,13 +6,22 @@ import info.projetcohesion.mcplugin.utils.FileUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
+/**
+ * EcoCommand.java
+ * <p>
+ * Implements SubCommand.java and it's methods.
+ * Used to control the server's economy.
+ *
+ * @author Jack Hogg
+ */
 public class EcoCommand implements SubCommand {
+
 
     @Override
     public String getName() {
@@ -56,7 +65,7 @@ public class EcoCommand implements SubCommand {
         if (args.length == 1
                 || (args.length == 2 && args[1].equalsIgnoreCase("balance"))) {
             player.sendMessage(ChatColor.GREEN + "Vous avez un total de : " +
-                    ChatColor.GOLD + file.getInt("accounts." + player.getUniqueId().toString()) + " \u272a");
+                    ChatColor.GOLD + file.getInt("accounts." + player.getUniqueId()) + " \u272a");
 
             return;
         }
@@ -65,13 +74,15 @@ public class EcoCommand implements SubCommand {
                 && args.length == 4
                 && player.hasPermission("pci.eco.admin")) {
 
-            OfflinePlayer pl = Bukkit.getPlayer(args[2]);
+            Player pl = Bukkit.getPlayer(args[2]);
             if (pl != null
                     && pl.hasPlayedBefore())
                 if (NumberUtils.isDigits(args[3])) {
                     eco.setAccountBalance(pl, eco.getAccountBalance(pl) + Integer.parseInt(args[3]));
-                    f_man.save();
-                    file.options().copyDefaults(true);
+                    eco.save();
+                    if (pl.isOnline()) pl.sendMessage(ChatColor.GREEN + "Une somme de : " +
+                            ChatColor.GOLD + Integer.parseInt(args[3]) + " \u272a" + ChatColor.GREEN
+                            + " vous a été ajoutée.");
                 } else player.sendMessage(ChatColor.RED + "ERROR: Le montant est invalide.");
             else player.sendMessage(ChatColor.RED + "ERROR: Le joueur est inaccessible");
 
@@ -79,14 +90,16 @@ public class EcoCommand implements SubCommand {
                 && args.length == 4
                 && player.hasPermission("pci.eco.admin")) {
 
-            OfflinePlayer pl = Bukkit.getPlayer(args[2]);
+            Player pl = Bukkit.getPlayer(args[2]);
             if (pl != null
                     && pl.hasPlayedBefore())
                 if (NumberUtils.isDigits(args[3]))
                     if (eco.getAccountBalance(pl) - Integer.parseInt(args[3]) >= 0) {
                         eco.setAccountBalance(pl, eco.getAccountBalance(pl) - Integer.parseInt(args[3]));
-                        f_man.save();
-                        file.options().copyDefaults(true);
+                        eco.save();
+                        if (pl.isOnline()) pl.sendMessage(ChatColor.GREEN + "Une somme de : " +
+                                ChatColor.GOLD + Integer.parseInt(args[3]) + " \u272a" + ChatColor.GREEN
+                                + " vous a été retirée.");
                     } else eco.setAccountBalance(pl, 0);
                 else player.sendMessage(ChatColor.RED + "ERROR: Le montant est invalide.");
             else player.sendMessage(ChatColor.RED + "ERROR: Le joueur est inaccessible");
@@ -94,13 +107,18 @@ public class EcoCommand implements SubCommand {
 
         } else if (args[1].equalsIgnoreCase("send")) {
 
-            OfflinePlayer pl = Bukkit.getPlayer(args[2]);
+            Player pl = Bukkit.getPlayer(args[2]);
             if (pl != null
                     && pl.hasPlayedBefore())
                 if (NumberUtils.isDigits(args[3])) {
                     eco.transfer(player, pl, Integer.parseInt(args[3]));
-                    f_man.save();
-                    file.options().copyDefaults(true);
+                    eco.save();
+                    player.sendMessage(ChatColor.GREEN + "Une somme de : " +
+                            ChatColor.GOLD + Integer.parseInt(args[3]) + " \u272a" + ChatColor.GREEN
+                            + " a été envoyée à " + ChatColor.GOLD + pl.getName() + ".");
+                    if (pl.isOnline()) pl.sendMessage(ChatColor.GREEN + "Une somme de : " +
+                            ChatColor.GOLD + Integer.parseInt(args[3]) + " \u272a" + ChatColor.GREEN
+                            + " vous a été envoyée par " + ChatColor.GOLD + player.getName() + ".");
                 } else player.sendMessage(ChatColor.RED + "ERROR: Le montant est invalide.");
             else player.sendMessage(ChatColor.RED + "ERROR: Le joueur est inaccessible");
 
@@ -135,10 +153,5 @@ public class EcoCommand implements SubCommand {
             pl.sendMessage(ChatColor.GREEN + "/!\\ Si le joueur abuse de cette demande, ne pas hésiter à contacter la modération.");
 
         } else player.sendMessage("ERROR: Impossible d'utiliser cette commande.");
-
-        // Ne semble pas sauvegarder correectement si mis ici.
-        // f_man.save();
-        // file.options().copyDefaults(true);
-
     }
 }

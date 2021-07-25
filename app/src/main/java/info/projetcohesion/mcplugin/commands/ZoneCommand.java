@@ -3,6 +3,7 @@ package info.projetcohesion.mcplugin.commands;
 import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.SubCommand;
 import info.projetcohesion.mcplugin.utils.FileUtils;
+import info.projetcohesion.mcplugin.utils.GUIUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,6 +11,14 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
+/**
+ * ZoneCommand.java
+ * <p>
+ * Implements SubCommand.java and it's methods.
+ * Used to control the player's personal chunks.
+ *
+ * @author Jack Hogg
+ */
 public class ZoneCommand implements SubCommand {
 
     private final Plugin _plugin = Plugin.getPlugin();
@@ -54,8 +63,28 @@ public class ZoneCommand implements SubCommand {
     public void commandUsage(Player player, String[] args) {
         FileUtils f_man = new FileUtils("zones");
         FileConfiguration file = f_man.get();
+        FileUtils f_man_s = new FileUtils("shop");
+        FileConfiguration file_s = f_man_s.get();
 
         String p_uuid = "zones." + player.getUniqueId();
+
+        if (args.length == 1) {
+            GUIUtils gui = new GUIUtils(player, 27, "Gestion de zone");
+            String actif = ChatColor.GREEN + "Activé", desactif = ChatColor.RED + "Desactivé";
+
+            if (file_s.getStringList("shop.purchased." + player.getUniqueId()).contains("pvp"))
+                gui.addItem("pvp", Material.PLAYER_HEAD, "Gestion du PvP", 3, Arrays.asList("Activez/Désactivez le PvP dans vos zones.", " ",
+                        file.getStringList("zones." + player.getUniqueId() + ".effects").contains("pvp") ? actif : desactif));
+            if (file_s.getStringList("shop.purchased." + player.getUniqueId()).contains("pve"))
+                gui.addItem("pve", Material.ZOMBIE_HEAD, "Gestion du PvE", 4, Arrays.asList("Activez/Désactivez le PvE dans vos zones.", " ",
+                        file.getStringList("zones." + player.getUniqueId() + ".effects").contains("pve") ? actif : desactif));
+            if (file_s.getStringList("shop.purchased." + player.getUniqueId()).contains("nat"))
+                gui.addItem("nat", Material.FIRE_CHARGE, "Gestion de la nature", 5, Arrays.asList("Activez/Désactivez les dégâts naturels dans votre zone.", " ",
+                        file.getStringList("zones." + player.getUniqueId() + ".effects").contains("nat") ? actif : desactif));
+
+            gui.openInventory(player);
+            return;
+        }
 
         if (args[1].equalsIgnoreCase("claim")
                 && args.length == 2) {
@@ -97,8 +126,9 @@ public class ZoneCommand implements SubCommand {
                 file.set(p_uuid + ".allowed", list);
                 file.set(p_uuid + ".chunks.1.x", chunk.getX());
                 file.set(p_uuid + ".chunks.1.z", chunk.getZ());
-
             }
+
+            player.sendMessage(ChatColor.GREEN + "Ce chunk est désormais à vous !");
 
         } else if (args[1].equalsIgnoreCase("unclaim")
                 && (args.length == 2 || args.length == 3)) {
@@ -128,6 +158,8 @@ public class ZoneCommand implements SubCommand {
                             file.set(p_uuid + ".number_of_chunks",
                                     chunks - 1);
 
+                            player.sendMessage(ChatColor.GREEN + "Ce chunk est désormais à la nature !");
+
                             break;
                         }
                     }
@@ -135,8 +167,6 @@ public class ZoneCommand implements SubCommand {
                     player.sendMessage(ChatColor.RED + "ERROR: Le chunk sous vos pieds n'est pas à vous.");
 
                 } else if (NumberUtils.isNumber(args[2])) { // Sinon, vérifier le chunk identifié
-
-                    // int id_zone = Integer.parseInt(args[2]);
 
                     if (file.isConfigurationSection(p_uuid + ".chunks." + args[2])) {
                         file.set(p_uuid + ".chunks." + args[2], null);
@@ -152,6 +182,9 @@ public class ZoneCommand implements SubCommand {
 
                         file.set(p_uuid + ".number_of_chunks",
                                 chunks - 1);
+
+                        player.sendMessage(ChatColor.GREEN + "Le chunk est désormais à la nature !");
+
                     } else {
                         player.sendMessage(ChatColor.RED + "ERROR: Vous n'avez pas de chunk avec cet identifiant.");
                     }
@@ -167,6 +200,7 @@ public class ZoneCommand implements SubCommand {
                     && (file.getInt(p_uuid + ".number_of_chunks")) != 0) {
                 file.set(p_uuid + ".number_of_chunks", 0);
                 file.set(p_uuid + ".chunks", null);
+                player.sendMessage(ChatColor.GREEN + "Tous vos chunks ont été abandonnés...");
             } else player.sendMessage(ChatColor.RED + "ERROR: Vous n'avez pas de zones à abandonner");
 
         } else if (args[1].equalsIgnoreCase("add")
@@ -181,6 +215,11 @@ public class ZoneCommand implements SubCommand {
                     List<String> l = file.getStringList(p_uuid + ".allowed");
                     l.add(pl.getUniqueId().toString());
                     file.set(p_uuid + ".allowed", l);
+
+                    player.sendMessage(ChatColor.GREEN + "Le joueur "
+                            + ChatColor.GOLD + pl.getName()
+                            + ChatColor.GREEN + " a été ajouté à votre zone.");
+
                 } else player.sendMessage(ChatColor.RED + "ERROR: Le joueur est déjà autorisé sur votre zone.");
             else player.sendMessage(ChatColor.RED + "ERROR: Le joueur n'a jamais été sur le serveur");
 
@@ -204,6 +243,10 @@ public class ZoneCommand implements SubCommand {
                     l.remove(pl.getUniqueId().toString());
                     file.set(p_uuid + ".allowed", l);
 
+                    player.sendMessage(ChatColor.GREEN + "Le joueur "
+                            + ChatColor.GOLD + pl.getName()
+                            + ChatColor.GREEN + " a été retiré à votre zone.");
+
                 } else player.sendMessage(ChatColor.RED + "ERROR: Le joueur n'est pas autorisé sur votre zone.");
             else player.sendMessage(ChatColor.RED + "ERROR: Le joueur n'a jamais été sur le serveur");
 
@@ -222,7 +265,7 @@ public class ZoneCommand implements SubCommand {
             if (args.length == 3) {
                 if (!NumberUtils.isNumber(args[2])) {
                     player.sendMessage(ChatColor.RED + "ERROR: L'identifiant entré n'est pas un entier.");
-                    return ;
+                    return;
                 }
                 id_zone = args[2];
             }
@@ -250,7 +293,7 @@ public class ZoneCommand implements SubCommand {
                 }
             }, 0, 20);
 
-        } else getUsage();
+        }
 
         file.options().copyDefaults(true);
         f_man.save();
