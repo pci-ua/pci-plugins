@@ -1,20 +1,24 @@
 # Plugin pour le serveur Minecraft de l'association PC[i]
-## Fonctionnalités à implémenter
-- Système de claim de zone (à déterminer)
-- Power-ups dans les zones claim
-- Génération de map arts via un serveur HTTP
-- Écrire un vrai README quand un peu de travail sera fait
+## Fonctionalités
+### Génération de cartes avec images
+![Image d'exemple](docs/mapart.png)
+Permet d'envoyer une image via un navigateur web qui peut être affichée en jeu sur une carte.
 
-## Style de code pour les contributions
-```java
-private int _privateField;
-public static int s_staticField;
-private static int s_privateStaticField;
+### Gestion de zones
+Un joueur peut revendiquer plusieurs chunks comme lui appartenant, et réaliser plusieurs actions dessus :
+- Protéger cette zone contre le vandalisme
+- Appliquer différents effets, comme une protection contre les dégâts
 
-/**
- * Javadoc
- */
-public void functionName(int argNumberOne, String argNumberTwo) {
-    this._privateField++; // Not _privateField without 'this.' before
-}
-```
+Le propriétaire peut mettre sur liste blanche d'autres joueurs pour leur donner plus de droits sur sa zone.
+
+### Économie
+Chaque joueur possède une certaine somme d'argent qu'il peut dépenser comme il le souhaite (de joueur à joueur ou dans des améliorations de zone).
+
+## Dépendances
+- [Spigot](https://www.spigotmc.org)
+- [ImageMagick](https://imagemagick.org)
+    - Debian (et dérivés) : `sudo apt install imagemagick`
+    - Arch Linux (et dérivés) : `sudo pacman -S imagemagick`
+
+## Contribuer au projet
+Voir les détails dans [CONTRIBUTING.md](CONTRIBUTING.md).
