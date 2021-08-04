@@ -5,9 +5,7 @@
 Permet d'envoyer une image via un navigateur web qui peut être affichée en jeu sur une carte.
 
 ### Gestion de zones
-Un joueur peut revendiquer plusieurs chunks comme lui appartenant, et réaliser plusieurs actions dessus :
-- Protéger cette zone contre le vandalisme
-- Appliquer différents effets, comme une protection contre les dégâts
+Un joueur peut revendiquer plusieurs chunks comme lui appartenant, et y appliquer différents effets, comme par exemple une protection contre les dégâts naturels.
 
 Le propriétaire peut mettre sur liste blanche d'autres joueurs pour leur donner plus de droits sur sa zone.
 
