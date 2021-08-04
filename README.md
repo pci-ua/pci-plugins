@@ -19,6 +19,7 @@ Chaque joueur possède une certaine somme d'argent qu'il peut dépenser comme il
 - [ImageMagick](https://imagemagick.org)
     - Debian (et dérivés) : `sudo apt install imagemagick`
     - Arch Linux (et dérivés) : `sudo pacman -S imagemagick`
+    - Windows (avec le [Gestionnaire de paquets Windows](https://github.com/microsoft/winget-cli)) : `winget install ImageMagick.ImageMagick`
 
 ## Contribuer au projet
 Voir les détails dans [CONTRIBUTING.md](CONTRIBUTING.md).
