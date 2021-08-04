@@ -35,11 +35,11 @@ public class Plugin extends JavaPlugin {
             try {
                 Server.start();
             } catch (IOException e) {
-                System.err.println("Failed to boot the integrated HTTP server !");
+                this.getLogger().severe("Failed to boot the integrated HTTP server !");
                 e.printStackTrace();
             }
         } else {
-            System.err.println("ImageMagick is not working. Check your PATH for a working magick binary.");
+            this.getLogger().severe("ImageMagick is not working. Check your PATH for a working magick binary.");
         }
     }
 
