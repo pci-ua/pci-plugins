@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapArtCommand implements SubCommand {
-    private static ImageStorageManager s_storage = new ImageStorageManager();
+    private static final ImageStorageManager s_storage = new ImageStorageManager();
 
     /**
      * Get the ImageStorageManager used to manage images within this command.
@@ -35,7 +35,8 @@ public class MapArtCommand implements SubCommand {
     @Override
     public Map<String, String> getUsage() {
         HashMap<String, String> usage = new HashMap<>();
-        usage.put("/pci mapart", "Affiche le nombre d'images en attente");
+        usage.put("/pci mapart", "Affiche le nombre d'images actuellement stockées");
+        usage.put("/pci mapart get <ID>", "Récupère en jeu l'image avec l'ID associé");
         usage.put("/pci mapart clear", "Vide les images en attente");
 
         return usage;
@@ -53,7 +54,7 @@ public class MapArtCommand implements SubCommand {
     @Override
     public void commandUsage(Player player, String[] args) {
         if(args.length == 1) { // /pci mapart
-            player.sendMessage("Il y a actuellement " + s_storage.size() + " image(s) en attente.");
+            player.sendMessage("Il y a actuellement " + s_storage.size() + " image(s) stockée(s) actuellement.");
         } else if(args.length == 2 && args[1].equalsIgnoreCase("clear") && player.isOp()) { // /pci mapart clear
             s_storage.clean();
             player.sendMessage("Vidé.");
