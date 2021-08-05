@@ -14,8 +14,21 @@ import java.util.logging.Logger;
  * The integrated HTTP server
  */
 public class Server {
+    /**
+     * The instance of the currently running Server. May be <code>null</code>.
+     */
     private static HttpServer s_server;
+
+    /**
+     * The configuration of the HTTP server, saved in the plugin data directory.
+     * @see FileUtils
+     */
     private static final FileUtils s_config = new FileUtils("http");
+
+    /**
+     * The plugin-wide logger
+     * @see org.bukkit.plugin.PluginLogger
+     */
     private static final Logger logger = Plugin.getPlugin().getLogger();
 
     /**

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * The HTTP traffic is managed here.
  */
 public class Handler implements HttpHandler {
-    private final Logger logger = Plugin.getPlugin().getLogger();
+    // ---- CONSTANTS VALUES ----
 
     /**
      * Header used at the start of a file uploaded by a HTML form with <code>enctype="multipart/form-data"</code>
@@ -32,6 +32,14 @@ public class Handler implements HttpHandler {
      * Byte representation of the character "\r"
      */
     private static final byte CR = 13; // "\r".getBytes() = byte[]{13}
+
+    // ---- END CONSTANTS ----
+
+    /**
+     * The plugin-wide logger
+     * @see org.bukkit.plugin.PluginLogger
+     */
+    private final Logger logger = Plugin.getPlugin().getLogger();
 
     /**
      * Handle the requests
