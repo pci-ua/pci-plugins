@@ -16,6 +16,11 @@ public class HttpCodes {
     public static final int CREATED = 201;
 
     /**
+     * When the resource asked by the client has been moved permanently
+     */
+    public static final int MOVED_PERMANENTLY = 301;
+
+    /**
      * When the client sent a malformed request to the server
      */
     public static final int BAD_REQUEST = 400;

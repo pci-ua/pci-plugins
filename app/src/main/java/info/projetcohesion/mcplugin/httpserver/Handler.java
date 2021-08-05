@@ -42,6 +42,22 @@ public class Handler implements HttpHandler {
     private final Logger logger = Plugin.getPlugin().getLogger();
 
     /**
+     * The URL that is used to redirect the client after the image has been processed
+     */
+    private String _redirectUrl;
+
+    /**
+     * Create an Handler object.
+     * @param redirectUrl The URL to redirect to after a successful image upload.
+     */
+    public Handler(String redirectUrl) {
+        assert redirectUrl != null;
+        assert !redirectUrl.isBlank();
+
+        _redirectUrl = redirectUrl;
+    }
+
+    /**
      * Handle the requests
      * @param exchange The HTTP exchange between the client and the server
      * @throws IOException If an I/O error occurs
@@ -79,23 +95,43 @@ public class Handler implements HttpHandler {
 
             String imageID = MapArtCommand.getImageManager().convertAndAdd(data);
 
-            sendResponse(exchange, imageID, HttpCodes.CREATED);
+            sendResponse(exchange, imageID, HttpCodes.MOVED_PERMANENTLY, _redirectUrl + "?id=" + imageID);
         } else {
             sendResponse(exchange, "GET is not supported", HttpCodes.METHOD_NOT_ALLOWED);
         }
     }
 
     /**
-     * Send responses to an HTTP client
+     * Send a response to an HTTP client. This is the same as using <code>sendResponse(HttpExchange, String, int, null)</code>.
      * @param exchange The HTTP exchange between the client and the server
      * @param text The response to send to the client
      * @param code The HTTP error code to send.
      * @throws IOException If an I/O error occurs
+     * @see Handler#sendResponse(HttpExchange, String, int, String)
      * @see Handler#handle(HttpExchange)
      * @see HttpCodes
      */
     private void sendResponse(HttpExchange exchange, String text, int code) throws IOException {
+        this.sendResponse(exchange, text, code, null);
+    }
+
+    /**
+     * Send a response to an HTTP client, with a <code>Location</code> header for redirection purposes.
+     * @param exchange The HTTP exchange between the client and the server
+     * @param text The response to send to the client
+     * @param code The HTTP error code to send.
+     * @param redirect The URL to redirect to. May be <code>null</code> if you don't want to redirect.
+     * @throws IOException If an I/O error occurs
+     * @see Handler#sendResponse(HttpExchange, String, int)
+     * @see Handler#handle(HttpExchange)
+     * @see HttpCodes
+     */
+    private void sendResponse(HttpExchange exchange, String text, int code, String redirect) throws IOException {
         OutputStream os = exchange.getResponseBody();
+
+        if (redirect != null) {
+            exchange.getResponseHeaders().add("Location", redirect);
+        }
 
         exchange.sendResponseHeaders(code, text.length());
         os.write(text.getBytes(StandardCharsets.UTF_8));

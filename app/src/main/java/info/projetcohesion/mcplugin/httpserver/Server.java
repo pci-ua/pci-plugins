@@ -41,7 +41,7 @@ public class Server {
             checkConfig();
 
             s_server = HttpServer.create(new InetSocketAddress(Objects.requireNonNull(s_config.get().getString("server.hostname")), s_config.get().getInt("server.port")), 0);
-            s_server.createContext("/", new Handler());
+            s_server.createContext("/", new Handler(Objects.requireNonNull(s_config.get().getString("redirect.target"))));
             s_server.setExecutor(Executors.newFixedThreadPool(s_config.get().getInt("perfs.threads")));
             s_server.start();
 
@@ -80,6 +80,10 @@ public class Server {
             s_config.get().set("perfs.threads", Runtime.getRuntime().availableProcessors());
 
             logger.info("Using all " + Runtime.getRuntime().availableProcessors() + " detected CPUs for HTTP traffic handling. You can change this in the config file.");
+        } if(s_config.get().getConfigurationSection("redirect") == null) {
+            s_config.get().set("redirect.target", "https://example.org/");
+
+            logger.warning("The redirect.target configuration value has been created with https://example.org/ as the default. You may want to change that.");
         }
 
         s_config.save();
