@@ -1,9 +1,10 @@
-package info.projetcohesion.mcplugin.httpserver;
+package info.projetcohesion.mcplugin.httpserver.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.commands.MapArtCommand;
+import info.projetcohesion.mcplugin.httpserver.HttpCodes;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,9 +14,11 @@ import java.util.logging.Logger;
 
 /**
  * The core of the integrated HTTP server.
- * The HTTP traffic is managed here.
+ * The HTTP traffic for file upload is managed here.
+ *
+ * @see HttpHandler
  */
-public class Handler implements HttpHandler {
+public class FileHandler implements HttpHandler {
     // ---- CONSTANTS VALUES ----
 
     /**
@@ -47,10 +50,10 @@ public class Handler implements HttpHandler {
     private String _redirectUrl;
 
     /**
-     * Create an Handler object.
+     * Create a <code>FileHandler</code> object.
      * @param redirectUrl The URL to redirect to after a successful image upload.
      */
-    public Handler(String redirectUrl) {
+    public FileHandler(String redirectUrl) {
         assert redirectUrl != null;
         assert !redirectUrl.isBlank();
 
@@ -107,8 +110,8 @@ public class Handler implements HttpHandler {
      * @param text The response to send to the client
      * @param code The HTTP error code to send.
      * @throws IOException If an I/O error occurs
-     * @see Handler#sendResponse(HttpExchange, String, int, String)
-     * @see Handler#handle(HttpExchange)
+     * @see FileHandler#sendResponse(HttpExchange, String, int, String)
+     * @see FileHandler#handle(HttpExchange)
      * @see HttpCodes
      */
     private void sendResponse(HttpExchange exchange, String text, int code) throws IOException {
@@ -122,8 +125,8 @@ public class Handler implements HttpHandler {
      * @param code The HTTP error code to send.
      * @param redirect The URL to redirect to. May be <code>null</code> if you don't want to redirect.
      * @throws IOException If an I/O error occurs
-     * @see Handler#sendResponse(HttpExchange, String, int)
-     * @see Handler#handle(HttpExchange)
+     * @see FileHandler#sendResponse(HttpExchange, String, int)
+     * @see FileHandler#handle(HttpExchange)
      * @see HttpCodes
      */
     private void sendResponse(HttpExchange exchange, String text, int code, String redirect) throws IOException {
