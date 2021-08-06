@@ -47,6 +47,7 @@ public class MapArtCommand implements SubCommand {
     public Map<String, String> getPermissions() {
         HashMap<String, String> perms = new HashMap<>();
         perms.put("/pci mapart", "");
+        perms.put("/pci mapart get <ID>", "");
         perms.put("/pci mapart clear", "pci.mapart.clear");
 
         return perms;
