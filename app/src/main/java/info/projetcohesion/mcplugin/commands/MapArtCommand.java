@@ -3,6 +3,7 @@ package info.projetcohesion.mcplugin.commands;
 import info.projetcohesion.mcplugin.SubCommand;
 import info.projetcohesion.mcplugin.events.MapInitEvent;
 import info.projetcohesion.mcplugin.utils.ImageStorageManager;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -54,21 +55,21 @@ public class MapArtCommand implements SubCommand {
     @Override
     public void commandUsage(Player player, String[] args) {
         if(args.length == 1) { // /pci mapart
-            player.sendMessage("Il y a actuellement " + s_storage.size() + " image(s) stockée(s) actuellement.");
+            player.sendMessage(ChatColor.GREEN + "Il y a actuellement " + ChatColor.GOLD + s_storage.size() + ChatColor.GREEN + " image(s) stockée(s) actuellement.");
         } else if(args.length == 2 && args[1].equalsIgnoreCase("clear") && player.isOp()) { // /pci mapart clear
             s_storage.clean();
-            player.sendMessage("Vidé.");
+            player.sendMessage(ChatColor.GREEN + "Vidé.");
         } else if(args.length == 2 && args[1].equalsIgnoreCase("get")) { // /pci mapart get
-            player.sendMessage("ID manquant");
+            player.sendMessage(ChatColor.RED + "ID manquant. Usage : /pci mapart get <ID>");
         } else if(args.length == 3 && args[1].equalsIgnoreCase("get")) { // /pci mapart get <id>
             if (s_storage.exists(args[2])) {
                 MapInitEvent.setWipId(args[2]); // Set the working id for the next map
 
                 player.getInventory().addItem(new ItemStack(Material.MAP));
 
-                player.sendMessage("Ouvrez une nouvelle carte pour admirer le résultat !");
+                player.sendMessage(ChatColor.GREEN + "Ouvrez une nouvelle carte pour admirer le résultat !");
             } else {
-                player.sendMessage("ID inexistant.");
+                player.sendMessage(ChatColor.RED + "ID inexistant.");
             }
         }
     }
