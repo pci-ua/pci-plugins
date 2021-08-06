@@ -2,6 +2,7 @@ package info.projetcohesion.mcplugin.httpserver;
 
 import com.sun.net.httpserver.HttpServer;
 import info.projetcohesion.mcplugin.Plugin;
+import info.projetcohesion.mcplugin.httpserver.handlers.RobotsHandler;
 import info.projetcohesion.mcplugin.utils.FileUtils;
 
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class Server {
 
             s_server = HttpServer.create(new InetSocketAddress(Objects.requireNonNull(s_config.get().getString("server.hostname")), s_config.get().getInt("server.port")), 0);
             s_server.createContext("/", new Handler(Objects.requireNonNull(s_config.get().getString("redirect.target"))));
+            s_server.createContext("/robots.txt", new RobotsHandler());
             s_server.setExecutor(Executors.newFixedThreadPool(s_config.get().getInt("perfs.threads")));
             s_server.start();
 
