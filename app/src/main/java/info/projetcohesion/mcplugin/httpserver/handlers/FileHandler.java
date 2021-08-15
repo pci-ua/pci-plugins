@@ -100,7 +100,7 @@ public class FileHandler implements HttpHandler {
 
             sendResponse(exchange, imageID, HttpCodes.MOVED_PERMANENTLY, _redirectUrl + "?id=" + imageID);
         } else {
-            sendResponse(exchange, "GET is not supported", HttpCodes.METHOD_NOT_ALLOWED);
+            sendResponse(exchange, exchange.getRequestMethod()+" is not supported (POST only)", HttpCodes.METHOD_NOT_ALLOWED);
         }
     }
 
