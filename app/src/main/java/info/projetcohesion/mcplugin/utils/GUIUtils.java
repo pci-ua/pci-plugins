@@ -13,6 +13,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 /**
  * GUIUtils.java
@@ -24,9 +26,10 @@ import java.util.List;
 public class GUIUtils {
 
     private final Inventory _inv;
+    private final String _title;
 
-    private static final HashMap<Integer, String> s_items = new HashMap<>();
-    private static final HashMap<Integer, Integer> s_prices = new HashMap<>();
+    private static final HashMap<String, Integer> s_items = new HashMap<>();
+    private static final HashMap<String, Integer> s_prices = new HashMap<>();
 
     /**
      * GUIUtils constructor
@@ -38,6 +41,11 @@ public class GUIUtils {
     public GUIUtils(Player player, int size, String title) {
 
         assert size % 9 == 0;
+
+        if (getPrices().size() != 0) getPrices().clear();
+        if (getItems().size() != 0) getItems().clear();
+
+        this._title = title;
 
         this._inv = Bukkit.createInventory(player,
                 size,
@@ -63,7 +71,7 @@ public class GUIUtils {
      * @param lore Lore of the item
      */
     public void addItem(String id, Material mat, String desc, int slot, List<String> lore) {
-        if (id != null) s_items.put(slot, id);
+        if (id != null) s_items.put(id, slot);
 
         ItemStack item = new ItemStack(mat);
         ItemMeta meta = item.getItemMeta();
@@ -104,7 +112,7 @@ public class GUIUtils {
         else l.add(ChatColor.RED + "ACHET\u00C9");
 
         addItem(id, mat, desc, slot, l);
-        s_prices.put(slot, price);
+        s_prices.put(id, price);
     }
 
     /**
@@ -153,7 +161,7 @@ public class GUIUtils {
      *
      * @return pairs of keys of slots and values of item id's
      */
-    public static HashMap<Integer, String> getItems() {
+    public static HashMap<String, Integer> getItems() {
         return s_items;
     }
 
@@ -162,8 +170,19 @@ public class GUIUtils {
      *
      * @return pairs of keys of slots and values of prices
      */
-    public static HashMap<Integer, Integer> getPrices() {
+    public static HashMap<String, Integer> getPrices() {
         return s_prices;
+    }
+
+    public static <K, V> K getKey(Map<K, V> map, V value)
+    {
+        for (Map.Entry<K, V> entry: map.entrySet())
+        {
+            if (value.equals(entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
 }

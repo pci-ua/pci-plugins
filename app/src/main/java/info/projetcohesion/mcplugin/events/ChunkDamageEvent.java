@@ -35,6 +35,28 @@ public class ChunkDamageEvent implements Listener {
     public void onDamageByEntity(EntityDamageByEntityEvent event) {
 
         if (event.getEntity() instanceof Player player) {
+
+            FileUtils f_man = new FileUtils("zones");
+            FileConfiguration file = f_man.get();
+
+            Chunk chunk = player.getWorld().getChunkAt(player.getLocation());
+
+            if (file.getConfigurationSection("zones") != null)
+                for (String local : Objects.requireNonNull(file.getConfigurationSection("zones")).getKeys(false))
+                    for (int i = 1; i <= file.getInt("zones." + local + ".number_of_chunks"); i++)
+                        if (chunk.getX() == file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".x")
+                                && chunk.getZ() == file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".z")) {
+                            if ((file.getString("zones." + local + ".chunks." + (char) (i + '0') + ".category").equals("z_comm")
+                                    || file.getString("zones." + local + ".chunks." + (char) (i + '0') + ".category").equals("z_pers"))
+                                    && event.getDamager() instanceof Player) {
+                                event.setCancelled(true);
+                                return;
+                            } else if (file.getString("zones." + local + ".chunks." + (char) (i + '0') + ".category").equals("z_war"))
+                                return;
+
+                        }
+
+            // Code exécutée seulement dans le cas d'une zone "défault"
             if ((event.getDamager() instanceof LivingEntity
                     && effectActivated(player, "pve"))
                     || event.getCause().equals(DamageCause.PROJECTILE))
@@ -57,7 +79,7 @@ public class ChunkDamageEvent implements Listener {
     public void onDamageByNature(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player
                 && !event.getCause().equals(DamageCause.ENTITY_ATTACK))
-            if (getWhiteList().contains(event.getCause())
+            if (this.getWhiteList().contains(event.getCause())
                     && effectActivated(player, "nat"))
                 event.setCancelled(true);
 
@@ -102,10 +124,9 @@ public class ChunkDamageEvent implements Listener {
             for (String local : Objects.requireNonNull(file.getConfigurationSection("zones")).getKeys(false))
                 for (int i = 1; i <= file.getInt("zones." + local + ".number_of_chunks"); i++)
                     if (chunk.getX() == file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".x")
-                            && chunk.getZ() == file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".z")) {
-                        return (file.getStringList("zones." + local + ".effects").contains(id));
-
-                    }
+                            && chunk.getZ() == file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".z"))
+                        return (file.getString("zones." + local + ".chunks." + (char) (i + '0') + ".category").equals("z_def")
+                                && file.getStringList("zones." + local + ".effects").contains(id));
 
         return false;
     }

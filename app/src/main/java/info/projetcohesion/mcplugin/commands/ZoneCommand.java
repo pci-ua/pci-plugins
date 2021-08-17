@@ -2,6 +2,7 @@ package info.projetcohesion.mcplugin.commands;
 
 import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.SubCommand;
+import info.projetcohesion.mcplugin.ZoneCategory;
 import info.projetcohesion.mcplugin.utils.FileUtils;
 import info.projetcohesion.mcplugin.utils.GUIUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -43,6 +44,7 @@ public class ZoneCommand implements SubCommand {
         list.put("/pci zone abandon", "Abandonner tous les chunks");
         list.put("/pci zone <add | remove>", "Autoriser ou interdire un joueur sur vos chunks");
         list.put("/pci zone spawn [zone_id]", "Se téléporter à un chunk");
+        list.put("/pci zone categ [zone_id]", "Changer la catégorie de sa zone");
 
         return list;
     }
@@ -55,6 +57,7 @@ public class ZoneCommand implements SubCommand {
         list.put("/pci zone abandon", "");
         list.put("/pci zone <add | remove>", "");
         list.put("/pci zone spawn [zone_id]", "");
+        list.put("/pci zone categ [zone_id]", "");
 
         return list;
     }
@@ -69,6 +72,7 @@ public class ZoneCommand implements SubCommand {
         String p_uuid = "zones." + player.getUniqueId();
 
         if (args.length == 1) {
+
             GUIUtils gui = new GUIUtils(player, 27, "Gestion de zone");
             String actif = ChatColor.GREEN + "Activé", desactif = ChatColor.RED + "Desactivé";
 
@@ -110,6 +114,7 @@ public class ZoneCommand implements SubCommand {
                     int chunks = file.getInt(p_uuid + ".number_of_chunks");
 
                     // Ajouter le chunk
+                    file.set(p_uuid + ".chunks." + (chunks + 1) + ".category", "z_def");
                     file.set(p_uuid + ".chunks." + (chunks + 1) + ".x", chunk.getX());
                     file.set(p_uuid + ".chunks." + (chunks + 1) + ".z", chunk.getZ());
                     file.set(p_uuid + ".number_of_chunks", chunks + 1);
@@ -124,6 +129,7 @@ public class ZoneCommand implements SubCommand {
 
                 file.set(p_uuid + ".number_of_chunks", 1);
                 file.set(p_uuid + ".allowed", list);
+                file.set(p_uuid + ".chunks.1.category", "z_def");
                 file.set(p_uuid + ".chunks.1.x", chunk.getX());
                 file.set(p_uuid + ".chunks.1.z", chunk.getZ());
             }
@@ -292,6 +298,52 @@ public class ZoneCommand implements SubCommand {
                     } else timer--;
                 }
             }, 0, 20);
+
+        } else if (args[1].equalsIgnoreCase("categ")
+                && args.length == 3) {
+
+            if (!file.isConfigurationSection("zones." + player.getUniqueId())
+                    || file.getInt(p_uuid + ".number_of_chunks") == 0) {
+                player.sendMessage(ChatColor.RED + "ERROR: Vous n'avez pas de zones.");
+                return;
+            }
+
+            if (!NumberUtils.isNumber(args[2])) {
+                player.sendMessage(ChatColor.RED + "ERROR: L'identifiant entré n'est pas un entier.");
+                return;
+            }
+
+            String id_zone = args[2];
+
+            /* TODO : Créer un GUI pour changer le type de zone
+            - Un item avec la catégorie en cours */
+
+            GUIUtils gui = new GUIUtils(player, 27, "Catégorie de zone - " + ChatColor.RED + "Chunk " + id_zone);
+            String zonestate = file.getString(p_uuid + ".chunks." + id_zone + ".category");
+
+            gui.addItem("z_def", Material.STONE, "Défault", 2,
+                    Arrays.asList("Configuration par défault.",
+                            zonestate.equals("z_def") ? ChatColor.GREEN + "Actif" : ""));
+
+            gui.addItem("z_pers", Material.CHEST, "Personnel", 3,
+                    Arrays.asList(
+                            "Aucun PvP sur votre zone mais vos coffres seront protégés.",
+                            zonestate.equals("z_pers") ? ChatColor.GREEN + "Actif" : ""));
+
+            gui.addItem("z_war", Material.DIAMOND_SWORD, "Warzone", 5,
+                    Arrays.asList(
+                            "Votre zone sera dédiée au PvP, que ce soit avec vos",
+                            "membres ou les autres membres du serveur.",
+                            zonestate.equals("z_war") ? ChatColor.GREEN + "Actif" : ""));
+
+            gui.addItem("z_comm", Material.WHITE_BANNER, "Communauté", 6,
+                    Arrays.asList(
+                            "Toute interaction sera proscrite mais l'ensemble du",
+                            "serveur pourra participer et intéragir sur votre zone.",
+                            zonestate.equals("z_comm") ? ChatColor.GREEN + "Actif" : ""));
+
+            gui.openInventory(player);
+            return;
 
         }
 
