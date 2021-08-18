@@ -9,9 +9,13 @@ import info.projetcohesion.mcplugin.events.PlayerServerJoinEvent;
 import info.projetcohesion.mcplugin.httpserver.Server;
 import info.projetcohesion.mcplugin.utils.CommandManager;
 import info.projetcohesion.mcplugin.utils.ImageMagick;
+import info.projetcohesion.mcplugin.utils.ZoneUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Plugin.java
@@ -41,10 +45,14 @@ public class Plugin extends JavaPlugin {
         } else {
             this.getLogger().severe("ImageMagick is not working. Check your PATH for a working magick binary.");
         }
+
+        ZoneUtils.loadData();
     }
 
     @Override
     public void onDisable() {
+        ZoneUtils.saveData();
+
         Server.stop();
     }
 

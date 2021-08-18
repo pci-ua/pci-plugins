@@ -1,6 +1,9 @@
 package info.projetcohesion.mcplugin.events;
 
+import info.projetcohesion.mcplugin.ZoneChunkData;
+import info.projetcohesion.mcplugin.ZoneData;
 import info.projetcohesion.mcplugin.utils.FileUtils;
+import info.projetcohesion.mcplugin.utils.ZoneUtils;
 import org.bukkit.Chunk;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
@@ -25,6 +28,7 @@ import java.util.Objects;
  */
 public class ChunkDamageEvent implements Listener {
 
+
     /**
      * Controls the damage inflicted by another entity source
      * depending on the player's unlocked effects.
@@ -36,25 +40,24 @@ public class ChunkDamageEvent implements Listener {
 
         if (event.getEntity() instanceof Player player) {
 
-            FileUtils f_man = new FileUtils("zones");
-            FileConfiguration file = f_man.get();
+            ZoneData zones = ZoneUtils.getZones().get(player.getUniqueId().toString());
 
             Chunk chunk = player.getWorld().getChunkAt(player.getLocation());
 
-            if (file.getConfigurationSection("zones") != null)
-                for (String local : Objects.requireNonNull(file.getConfigurationSection("zones")).getKeys(false))
-                    for (int i = 1; i <= file.getInt("zones." + local + ".number_of_chunks"); i++)
-                        if (chunk.getX() == file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".x")
-                                && chunk.getZ() == file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".z")) {
-                            if ((file.getString("zones." + local + ".chunks." + (char) (i + '0') + ".category").equals("z_comm")
-                                    || file.getString("zones." + local + ".chunks." + (char) (i + '0') + ".category").equals("z_pers"))
-                                    && event.getDamager() instanceof Player) {
-                                event.setCancelled(true);
-                                return;
-                            } else if (file.getString("zones." + local + ".chunks." + (char) (i + '0') + ".category").equals("z_war"))
-                                return;
+            if (zones != null)
+                for (ZoneChunkData data : ZoneUtils.getAllChunks()) {
+                    if (chunk.getX() == data.getX()
+                            && chunk.getZ() == data.getZ()) {
+                        if ((data.getCategory().equals("z_comm")
+                                || data.getCategory().equals("z_pers"))
+                                && event.getDamager() instanceof Player) {
+                            event.setCancelled(true);
+                            return;
+                        } else if (data.getCategory().equals("z_war"))
+                            return;
 
-                        }
+                    }
+                }
 
             // Code exécutée seulement dans le cas d'une zone "défault"
             if ((event.getDamager() instanceof LivingEntity
@@ -115,18 +118,16 @@ public class ChunkDamageEvent implements Listener {
      * @return <code>true</code> if the player has unlocked the effect, <code>false</code> otherwise.
      */
     public boolean effectActivated(Player player, String id) {
-        FileUtils f_man = new FileUtils("zones");
-        FileConfiguration file = f_man.get();
+        ZoneData zones = ZoneUtils.getZones().get(player.getUniqueId().toString());
 
         Chunk chunk = player.getWorld().getChunkAt(player.getLocation());
 
-        if (file.getConfigurationSection("zones") != null)
-            for (String local : Objects.requireNonNull(file.getConfigurationSection("zones")).getKeys(false))
-                for (int i = 1; i <= file.getInt("zones." + local + ".number_of_chunks"); i++)
-                    if (chunk.getX() == file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".x")
-                            && chunk.getZ() == file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".z"))
-                        return (file.getString("zones." + local + ".chunks." + (char) (i + '0') + ".category").equals("z_def")
-                                && file.getStringList("zones." + local + ".effects").contains(id));
+        if (zones != null)
+            for (ZoneChunkData data : ZoneUtils.getAllChunks())
+                if (chunk.getX() == data.getX()
+                        && chunk.getZ() == data.getZ())
+                    return (data.getCategory().equals("z_def")
+                            && zones.getEffects().contains(id));
 
         return false;
     }

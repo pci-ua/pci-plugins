@@ -1,9 +1,11 @@
 package info.projetcohesion.mcplugin.events;
 
 import info.projetcohesion.mcplugin.ZoneCategory;
+import info.projetcohesion.mcplugin.ZoneData;
 import info.projetcohesion.mcplugin.utils.EcoUtils;
 import info.projetcohesion.mcplugin.utils.FileUtils;
 import info.projetcohesion.mcplugin.utils.GUIUtils;
+import info.projetcohesion.mcplugin.utils.ZoneUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -107,8 +109,8 @@ public class FancyInventoryEvent implements Listener {
      */
     @EventHandler
     public void onZoneChange(InventoryClickEvent e) {
-        FileUtils f_man = new FileUtils("zones");
-        FileConfiguration file = f_man.get();
+
+        ZoneData zones = ZoneUtils.getZones().get(e.getWhoClicked().getUniqueId().toString());
 
         HashMap<String, Integer> items = GUIUtils.getItems();
 
@@ -124,20 +126,16 @@ public class FancyInventoryEvent implements Listener {
 
             lore.remove(lore.size() - 1);
 
-            List<String> l = file.getStringList("zones." + e.getWhoClicked().getUniqueId() + ".effects");
-            if (l.contains(GUIUtils.getKey(items, e.getSlot()))) {
+            if (zones.getEffects().contains(GUIUtils.getKey(items, e.getSlot()))) {
                 lore.add(ChatColor.RED + "Desactivé");
-                l.remove(GUIUtils.getKey(items, e.getSlot()));
+                zones.getEffects().remove(GUIUtils.getKey(items, e.getSlot()));
             } else {
                 lore.add(ChatColor.GREEN + "Activé");
-                l.add(GUIUtils.getKey(items, e.getSlot()));
+                zones.getEffects().add(GUIUtils.getKey(items, e.getSlot()));
             }
-            file.set("zones." + e.getWhoClicked().getUniqueId() + ".effects", l);
 
             meta.setLore(lore);
             e.getCurrentItem().setItemMeta(meta);
-
-            f_man.save();
 
         }
     }
@@ -150,8 +148,8 @@ public class FancyInventoryEvent implements Listener {
      */
     @EventHandler
     public void onZoneCategoryChange(InventoryClickEvent e) {
-        FileUtils f_man = new FileUtils("zones");
-        FileConfiguration file = f_man.get();
+
+        ZoneData zones = ZoneUtils.getZones().get(e.getWhoClicked().getUniqueId().toString());
 
         HashMap<String, Integer> items = GUIUtils.getItems();
 
@@ -189,7 +187,7 @@ public class FancyInventoryEvent implements Listener {
 
                 lore.add(ChatColor.GREEN + "Actif");
 
-                file.set("zones." + e.getWhoClicked().getUniqueId() + ".chunks." + chunk + ".category", GUIUtils.getKey(items, e.getSlot()));
+                zones.getChunks().get(Integer.parseInt(chunk) - 1).setCategory(GUIUtils.getKey(items, e.getSlot()));
             } else {
                 e.setCancelled(true);
                 e.getWhoClicked().sendMessage(ChatColor.RED + "Vous avez déjà attribué cette catégorie.");
@@ -198,8 +196,6 @@ public class FancyInventoryEvent implements Listener {
 
             meta.setLore(lore);
             e.getCurrentItem().setItemMeta(meta);
-
-            f_man.save();
 
         }
     }
