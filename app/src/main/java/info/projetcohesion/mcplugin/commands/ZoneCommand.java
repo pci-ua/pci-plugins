@@ -92,8 +92,7 @@ public class ZoneCommand implements SubCommand {
         if (args[1].equalsIgnoreCase("claim")
                 && args.length == 2) {
 
-            if (zones.getNumberOfChunks() == 4)
-            {
+            if (zones.getNumberOfChunks() == 4) {
                 player.sendMessage(ChatColor.RED + "ERROR: Tu as déjà le nombre de zones maximales que tu peux posséder.");
                 return;
             }
@@ -110,12 +109,12 @@ public class ZoneCommand implements SubCommand {
             }
 
             zones.addChunk(
-                chunk.getX(),
-                chunk.getZ()
+                    chunk.getX(),
+                    chunk.getZ()
             );
 
             if (!zones.isMember(player.getUniqueId().toString())) zones.addMember(
-                player.getUniqueId().toString()
+                    player.getUniqueId().toString()
             );
 
             player.sendMessage(ChatColor.GREEN + "Ce chunk est désormais à vous !");
@@ -130,11 +129,13 @@ public class ZoneCommand implements SubCommand {
             else {
                 if (args.length == 2) {
                     Chunk chunk = player.getWorld().getChunkAt(player.getLocation());
-                    zones.removeChunk(chunk.getX(), chunk.getZ());
-                    player.sendMessage(ChatColor.GREEN + "Le chunk est rendu à la nature.");
+                    if (zones.removeChunk(chunk.getX(), chunk.getZ()))
+                        player.sendMessage(ChatColor.GREEN + "Le chunk est rendu à la nature.");
+                    else player.sendMessage(ChatColor.RED + "Le chunk n'est pas à vous.");
                 } else if (NumberUtils.isNumber(args[2])) { // Sinon, vérifier le chunk identifié
-                    zones.removeChunkById(Integer.parseInt(args[2]) - 1);
-                    player.sendMessage(ChatColor.GREEN + "Le chunk est rendu à la nature.");
+                    if (zones.removeChunkById(Integer.parseInt(args[2]) - 1))
+                        player.sendMessage(ChatColor.GREEN + "Le chunk est rendu à la nature.");
+                    else player.sendMessage(ChatColor.RED + "Le chunk n'est pas à vous.");
                 } else {
                     player.sendMessage(ChatColor.RED + "ERROR: L'identifiant entré n'est pas un entier.");
                 }
@@ -213,7 +214,7 @@ public class ZoneCommand implements SubCommand {
                 int timer = 5;
 
                 public void run() {
-                    player.sendMessage(ChatColor.GREEN + "PC[i] Téléportation dans " + timer + " secondes.");
+                    player.sendMessage(ChatColor.GREEN + "Téléportation dans " + timer + " secondes.");
 
                     if (timer == 0) {
                         Location loc = new Location(player.getWorld(),
@@ -242,9 +243,6 @@ public class ZoneCommand implements SubCommand {
 
             String id_zone = args[2];
 
-            /* TODO : Créer un GUI pour changer le type de zone
-            - Un item avec la catégorie en cours */
-
             GUIUtils gui = new GUIUtils(player, 27, "Catégorie de zone - " + ChatColor.RED + "Chunk " + id_zone);
             String zoneState = zones.getChunks().get(Integer.parseInt(id_zone)).getCategory();
 
@@ -254,19 +252,22 @@ public class ZoneCommand implements SubCommand {
 
             gui.addItem("z_pers", Material.CHEST, "Personnel", 3,
                     Arrays.asList(
-                            "Aucun PvP sur votre zone mais vos coffres seront protégés.",
+                            "Aucun PvP sur votre zone mais vos coffres",
+                            "seront protégés.",
                             zoneState.equals("z_pers") ? ChatColor.GREEN + "Actif" : ""));
 
             gui.addItem("z_war", Material.DIAMOND_SWORD, "Warzone", 5,
                     Arrays.asList(
-                            "Votre zone sera dédiée au PvP, que ce soit avec vos",
-                            "membres ou les autres membres du serveur.",
+                            "Votre zone sera dédiée au PvP, ",
+                            "que ce soit avec vos membres ou",
+                            "les autres membres du serveur.",
                             zoneState.equals("z_war") ? ChatColor.GREEN + "Actif" : ""));
 
             gui.addItem("z_comm", Material.WHITE_BANNER, "Communauté", 6,
                     Arrays.asList(
-                            "Toute interaction sera proscrite mais l'ensemble du",
-                            "serveur pourra participer et intéragir sur votre zone.",
+                            "Toute interaction sera proscrite",
+                            "mais l'ensemble du serveur pourra",
+                            "participer et intéragir sur votre zone.",
                             zoneState.equals("z_comm") ? ChatColor.GREEN + "Actif" : ""));
 
             gui.openInventory(player);

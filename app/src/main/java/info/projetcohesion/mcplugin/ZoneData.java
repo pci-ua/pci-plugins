@@ -23,21 +23,29 @@ public class ZoneData {
         this._numberOfChunks++;
     }
 
-    public void removeChunk(int x, int z) {
+    public boolean removeChunk(int x, int z) {
         if (isOwned(x, z)) {
             int id = getChunkId(x, z);
             this._chunks.remove(id);
             this._numberOfChunks--;
+
+            return true;
         }
+
+        return false;
     }
 
-    public void removeChunkById(int id) {
+    public boolean removeChunkById(int id) {
         ZoneChunkData chunk = this._chunks.get(id);
 
         if (this.isOwned(chunk.getX(), chunk.getZ())) {
             this._chunks.remove(id);
             this._numberOfChunks--;
+
+            return true;
         }
+
+        return false;
     }
 
     public void removeAllChunks() {

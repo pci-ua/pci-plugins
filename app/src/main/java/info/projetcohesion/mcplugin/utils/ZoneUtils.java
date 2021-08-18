@@ -13,10 +13,15 @@ public class ZoneUtils {
 
     private static final HashMap<String, ZoneData> s_zones = new HashMap<>();
 
+    public static void newData(String uuid) {
+        s_zones.put(uuid, new ZoneData(0, null, null, null));
+    }
+
     public static void loadData() {
         FileConfiguration file = new FileUtils("zones").get();
 
-        if (file.getConfigurationSection("zones") == null) return;
+        if (file.getConfigurationSection("zones") == null)
+            return;
 
         for (String uuid : file.getConfigurationSection("zones").getKeys(false)) {
 
@@ -24,9 +29,9 @@ public class ZoneUtils {
 
             for (int i = 1; i <= file.getInt("zones." + uuid + ".number_of_chunks"); i++) {
                 ZoneChunkData chunk = new ZoneChunkData(
-                        file.getInt("zones." + uuid + ".chunks." + (char)(i + '0') + ".x"),
-                        file.getInt("zones." + uuid + ".chunks." + (char)(i + '0') + ".z"),
-                        file.getString("zones." + uuid + ".chunks." + (char)(i + '0') + ".category")
+                        file.getInt("zones." + uuid + ".chunks." + (char) (i + '0') + ".x"),
+                        file.getInt("zones." + uuid + ".chunks." + (char) (i + '0') + ".z"),
+                        file.getString("zones." + uuid + ".chunks." + (char) (i + '0') + ".category")
                 );
 
                 chunks.add(chunk);
@@ -61,9 +66,9 @@ public class ZoneUtils {
             for (ZoneChunkData chunk : s_zones.get(uuid).getChunks()) {
                 int id = s_zones.get(uuid).getChunks().indexOf(chunk) + 1;
 
-                file.set("zones." + uuid + ".chunks." + (char)(id + '0') + ".x", chunk.getX());
-                file.set("zones." + uuid + ".chunks." + (char)(id + '0') + ".z", chunk.getZ());
-                file.set("zones." + uuid + ".chunks." + (char)(id + '0') + ".category", chunk.getCategory());
+                file.set("zones." + uuid + ".chunks." + (char) (id + '0') + ".x", chunk.getX());
+                file.set("zones." + uuid + ".chunks." + (char) (id + '0') + ".z", chunk.getZ());
+                file.set("zones." + uuid + ".chunks." + (char) (id + '0') + ".category", chunk.getCategory());
             }
         }
 

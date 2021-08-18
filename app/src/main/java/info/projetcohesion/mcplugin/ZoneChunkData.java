@@ -6,7 +6,7 @@ public class ZoneChunkData {
 
     private final int _x;
     private final int _z;
-    private final String _category;
+    private String _category;
 
     public ZoneChunkData(int x, int z, String category) {
         this._x = x;
@@ -25,4 +25,6 @@ public class ZoneChunkData {
     public String getCategory() {
         return _category;
     }
+
+    public void setCategory(String category) { this._category = category; }
 }

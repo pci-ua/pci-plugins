@@ -1,5 +1,7 @@
 package info.projetcohesion.mcplugin.utils;
 
+import info.projetcohesion.mcplugin.ZoneChunkData;
+import info.projetcohesion.mcplugin.ZoneData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -46,22 +48,21 @@ public class ScoreboardUtils {
         Score s2 = objective.getScore(" ");
 
         Chunk chunk = player.getWorld().getChunkAt(player.getLocation());
-        AtomicReference<Score> s3 = new AtomicReference<>(objective.getScore(ChatColor.GOLD + "Chunk : " + ChatColor.RED + "Warzone"));
+        Score s3 = (objective.getScore(ChatColor.GOLD + "Chunk : " + ChatColor.RED + "Warzone"));
 
-        if (file.getConfigurationSection("zones") != null)
-            Objects.requireNonNull(file.getConfigurationSection("zones")).getKeys(false).forEach(local -> {
+        ZoneData zones = ZoneUtils.getZones().get(player.getUniqueId().toString());
 
-                for (int i = 1; i <= file.getInt("zones." + local + ".number_of_chunks"); i++)
-                    if (chunk.getX() == file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".x")
-                            && chunk.getZ() == file.getInt("zones." + local + ".chunks." + (char) (i + '0') + ".z")) {
-                        if (player.getUniqueId().toString().equals(local))
-                            s3.set(objective.getScore(ChatColor.GOLD + "Chunk : " + ChatColor.GREEN + "Phaeon"));
-                        else
-                            s3.set(objective.getScore(ChatColor.GOLD + "Chunk : " + ChatColor.RED + Objects.requireNonNull(Bukkit.getPlayer(local)).getName()));
+        if (zones != null)
+            for (ZoneChunkData data : ZoneUtils.getAllChunks())
+                if (chunk.getX() == data.getX()
+                        && chunk.getZ() == data.getZ()) {
 
-                        return;
-                    }
-            });
+                    if (zones.getChunks().contains(data))
+                        s3 = objective.getScore(ChatColor.GOLD + "Chunk : " + ChatColor.GREEN + player.getDisplayName());
+                    else
+                        s3 = objective.getScore(ChatColor.GOLD + "Chunk : " + ChatColor.RED + "Territoire ennemi");
+
+                }
 
         Score s4 = objective.getScore("  ");
         Score s5 = objective.getScore(ChatColor.AQUA + "Pseudo : " + ChatColor.GREEN + player.getDisplayName());
@@ -69,7 +70,7 @@ public class ScoreboardUtils {
         score.setScore(6);
         s1.setScore(5);
         s2.setScore(4);
-        s3.get().setScore(3);
+        s3.setScore(3);
         s4.setScore(2);
         s5.setScore(1);
 

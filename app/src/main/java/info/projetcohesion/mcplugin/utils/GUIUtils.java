@@ -26,7 +26,6 @@ import java.util.Map;
 public class GUIUtils {
 
     private final Inventory _inv;
-    private final String _title;
 
     private static final HashMap<String, Integer> s_items = new HashMap<>();
     private static final HashMap<String, Integer> s_prices = new HashMap<>();
@@ -44,8 +43,6 @@ public class GUIUtils {
 
         if (getPrices().size() != 0) getPrices().clear();
         if (getItems().size() != 0) getItems().clear();
-
-        this._title = title;
 
         this._inv = Bukkit.createInventory(player,
                 size,
