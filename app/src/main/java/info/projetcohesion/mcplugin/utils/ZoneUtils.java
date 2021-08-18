@@ -8,13 +8,17 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class ZoneUtils {
 
     private static final HashMap<String, ZoneData> s_zones = new HashMap<>();
 
     public static void newData(String uuid) {
-        s_zones.put(uuid, new ZoneData(0, null, null, null));
+        List<String> allowed = new ArrayList<>(), effects = new ArrayList<>();
+        List<ZoneChunkData> chunks = new ArrayList<>();
+
+        s_zones.put(uuid, new ZoneData(0, allowed, effects, chunks));
     }
 
     public static void loadData() {
@@ -23,7 +27,7 @@ public class ZoneUtils {
         if (file.getConfigurationSection("zones") == null)
             return;
 
-        for (String uuid : file.getConfigurationSection("zones").getKeys(false)) {
+        for (String uuid : Objects.requireNonNull(file.getConfigurationSection("zones")).getKeys(false)) {
 
             List<ZoneChunkData> chunks = new ArrayList<>();
 

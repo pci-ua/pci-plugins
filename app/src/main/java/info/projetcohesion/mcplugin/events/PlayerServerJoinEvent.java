@@ -29,6 +29,7 @@ public class PlayerServerJoinEvent implements Listener {
         EcoUtils file = new EcoUtils();
 
         if (ZoneUtils.getPlayerData(event.getPlayer().getUniqueId().toString()) == null) {
+            event.getPlayer().sendMessage("Coucou");
             ZoneUtils.newData(event.getPlayer().getUniqueId().toString());
         }
 

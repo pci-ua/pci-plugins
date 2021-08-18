@@ -187,7 +187,7 @@ public class FancyInventoryEvent implements Listener {
 
                 lore.add(ChatColor.GREEN + "Actif");
 
-                zones.getChunks().get(Integer.parseInt(chunk)).setCategory(GUIUtils.getKey(items, e.getSlot()));
+                zones.getChunks().get(Integer.parseInt(chunk) - 1).setCategory(GUIUtils.getKey(items, e.getSlot()));
             } else {
                 e.setCancelled(true);
                 e.getWhoClicked().sendMessage(ChatColor.RED + "Vous avez déjà attribué cette catégorie.");

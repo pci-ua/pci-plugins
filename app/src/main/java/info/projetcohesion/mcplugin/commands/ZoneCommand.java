@@ -203,6 +203,11 @@ public class ZoneCommand implements SubCommand {
                     player.sendMessage(ChatColor.RED + "ERROR: L'identifiant entré n'est pas un entier.");
                     return;
                 }
+
+                if (Integer.parseInt(args[2]) > zones.getChunks().size()) {
+                    player.sendMessage(ChatColor.RED + "ERROR: L'identifiant entré n'est pas valable.");
+                    return;
+                }
                 id_zone = Integer.parseInt(args[2]);
             }
 
@@ -241,10 +246,15 @@ public class ZoneCommand implements SubCommand {
                 return;
             }
 
+            if (Integer.parseInt(args[2]) > zones.getChunks().size()) {
+                player.sendMessage(ChatColor.RED + "ERROR: L'identifiant entré n'est pas valable.");
+                return;
+            }
+
             String id_zone = args[2];
 
             GUIUtils gui = new GUIUtils(player, 27, "Catégorie de zone - " + ChatColor.RED + "Chunk " + id_zone);
-            String zoneState = zones.getChunks().get(Integer.parseInt(id_zone)).getCategory();
+            String zoneState = zones.getChunks().get(Integer.parseInt(id_zone) - 1).getCategory();
 
             gui.addItem("z_def", Material.STONE, "Défault", 2,
                     Arrays.asList("Configuration par défault.",
