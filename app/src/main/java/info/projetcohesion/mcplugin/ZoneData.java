@@ -1,11 +1,6 @@
 package info.projetcohesion.mcplugin;
 
-import info.projetcohesion.mcplugin.utils.FileUtils;
-import org.bukkit.configuration.file.FileConfiguration;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class ZoneData {
 
@@ -22,23 +17,21 @@ public class ZoneData {
         this._chunks = chunks;
     }
 
-    public void addChunk(String playerUUID, int x, int z) {
-        if (!this.isOwned(x, z)) {
-            ZoneChunkData chunk = new ZoneChunkData(x, z, "z_def");
-            this._chunks.add(chunk);
-            this._numberOfChunks++;
-        }
+    public void addChunk(int x, int z) {
+        ZoneChunkData chunk = new ZoneChunkData(x, z, "z_def");
+        this._chunks.add(chunk);
+        this._numberOfChunks++;
     }
 
-    public void removeChunk(String playerUUID, int x, int z) {
-        if (this.isOwned(x, z)) {
+    public void removeChunk(int x, int z) {
+        if (isOwned(x, z)) {
             int id = getChunkId(x, z);
             this._chunks.remove(id);
             this._numberOfChunks--;
         }
     }
 
-    public void removeChunkById(String playerUUID, int id) {
+    public void removeChunkById(int id) {
         ZoneChunkData chunk = this._chunks.get(id);
 
         if (this.isOwned(chunk.getX(), chunk.getZ())) {
@@ -57,7 +50,7 @@ public class ZoneData {
     }
 
     public void addMember(String playerUUID) {
-        if (!isMember(playerUUID)) this._allowed.add(playerUUID);
+        this._allowed.add(playerUUID);
     }
 
     public boolean isMember(String playerUUID) {
@@ -65,7 +58,7 @@ public class ZoneData {
     }
 
     public void removeMember(String playerUUID) {
-        if (isMember(playerUUID)) this._allowed.remove(playerUUID);
+        this._allowed.remove(playerUUID);
     }
 
     public boolean isOwned(int x, int z) {

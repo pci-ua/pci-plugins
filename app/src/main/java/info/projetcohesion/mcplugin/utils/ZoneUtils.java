@@ -44,7 +44,10 @@ public class ZoneUtils {
     }
 
     public static void saveData() {
-        FileConfiguration file = new FileUtils("zones").get();
+        FileUtils f_man = new FileUtils("zones");
+        FileConfiguration file = f_man.get();
+
+        file.set("zones", null);
 
         for (String uuid : s_zones.keySet()) {
             file.set("zones." + uuid + ".number_of_chunks", s_zones.get(uuid).getNumberOfChunks());
@@ -63,17 +66,12 @@ public class ZoneUtils {
                 file.set("zones." + uuid + ".chunks." + (char)(id + '0') + ".category", chunk.getCategory());
             }
         }
+
+        file.options().copyDefaults(true);
+        f_man.save();
     }
 
-    public ZoneData getData(String playerUUID) {
-        return s_zones.get(playerUUID);
-    }
-
-    public static HashMap<String, ZoneData> getZones() {
-        return s_zones;
-    }
-
-    public void showData() {
+    public static void showData() {
         for (String uuid : s_zones.keySet()) {
             Bukkit.getPlayer("Phaeon").sendMessage("Number of chunks : " + s_zones.get(uuid).getNumberOfChunks());
 
@@ -90,6 +88,34 @@ public class ZoneUtils {
                 Bukkit.getPlayer("Phaeon").sendMessage(chunk.getX() + " " + chunk.getZ() + " " + chunk.getCategory());
             }
         }
+    }
+
+    public static ZoneData getPlayerData(String playerUUID) {
+        return s_zones.get(playerUUID);
+    }
+
+    public static List<ZoneData> getAllData() {
+        List<ZoneData> data = new ArrayList<>();
+
+        for (String uuid : s_zones.keySet()) {
+            data.add(s_zones.get(uuid));
+        }
+
+        return data;
+    }
+
+    public static List<ZoneChunkData> getAllChunks() {
+        List<ZoneChunkData> data = new ArrayList<>();
+
+        for (String uuid : s_zones.keySet()) {
+            data.addAll(s_zones.get(uuid).getChunks());
+        }
+
+        return data;
+    }
+
+    public static HashMap<String, ZoneData> getZones() {
+        return s_zones;
     }
 
 }
