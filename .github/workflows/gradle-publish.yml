@@ -35,4 +35,4 @@ jobs:
         tag: release
         artifacts: "app/build/libs/app.jar"
         bodyFile: "README.md"
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.TOKEN_PCIPLUGIN_RELEASE }}
