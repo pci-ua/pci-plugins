@@ -34,5 +34,5 @@ jobs:
       with:
         tag: release
         artifacts: "app/build/libs/app.jar"
-        bodyFile: "body.md"
+        bodyFile: "README.md"
         token: ${{ secrets.GITHUB_TOKEN }}
