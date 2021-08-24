@@ -29,9 +29,6 @@ jobs:
 
     - name: Build with Gradle
       run: gradle build
-      
-    - name: dangerous for test purpose only
-      run: echo ${{ secrets.TOKEN_PCIPLUGIN_RELEASE }}
 
     - uses: ncipollo/release-action@v1
       with:
