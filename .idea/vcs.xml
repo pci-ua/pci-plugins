@@ -2,11 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/run/BuildData" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/run/Bukkit" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/run/CraftBukkit" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/run/Spigot" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/run/Spigot/Spigot-API" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/run/Spigot/Spigot-Server" vcs="Git" />
   </component>
 </project>
