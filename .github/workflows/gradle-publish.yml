@@ -6,12 +6,8 @@ name: Build and release
 on:
   push:
     branches: [ production ]
-    tags:
-    - 'release'
   pull_request:
     branches: [ production ]
-    tags:
-    - 'release'
 
 jobs:
   build:
@@ -36,6 +32,7 @@ jobs:
 
     - uses: ncipollo/release-action@v1
       with:
+        tag: release
         artifacts: "app/build/libs/app.jar"
         bodyFile: "body.md"
         token: ${{ secrets.GITHUB_TOKEN }}
