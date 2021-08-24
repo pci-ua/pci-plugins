@@ -5,6 +5,9 @@
 - Génération de map arts via un serveur HTTP
 - Écrire un vrai README quand un peu de travail sera fait
 
+![Release status](https://github.com/pci-ua/pci-plugins/actions/workflows/build-release.yml/badge.svg)
+![Master status](https://github.com/pci-ua/pci-plugins/actions/workflows/check-build.yml/badge.svg)
+
 ## Style de code pour les contributions
 ```java
 private int _privateField;
