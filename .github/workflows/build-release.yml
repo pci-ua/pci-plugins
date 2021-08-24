@@ -27,7 +27,7 @@ jobs:
       
     - name: Get version
       run: |
-       grep ^version: app/src/main/resources/plugin.yml >> $GITHUB_ENV
+       version=$(grep ^version: app/src/main/resources/plugin.yml) && echo ${version/:/=} >> $GITHUB_ENV
 
     - uses: ncipollo/release-action@v1
       with:
