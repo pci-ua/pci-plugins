@@ -2,18 +2,22 @@ package info.projetcohesion.mcplugin.httpserver;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.commands.MapArtCommand;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 /**
  * The core of the integrated HTTP server.
  * The HTTP traffic is managed here.
  */
 public class Handler implements HttpHandler {
+    private final Logger logger = Plugin.getPlugin().getLogger();
+
     /**
      * Header used at the start of a file uploaded by a HTML form with <code>enctype="multipart/form-data"</code>
      */
@@ -37,7 +41,7 @@ public class Handler implements HttpHandler {
      */
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        System.out.println("HTTP request from " + exchange.getRemoteAddress().toString()); // Log the IPs addresses
+        logger.info("HTTP request from " + exchange.getRemoteAddress().toString()); // Log the IPs addresses
         if (exchange.getRequestMethod().equalsIgnoreCase("POST")) {
             byte[] data = exchange.getRequestBody().readAllBytes();
 
@@ -123,7 +127,7 @@ public class Handler implements HttpHandler {
      * @throws IOException If an I/O error occurs
      */
     private void badRequest(HttpExchange exchange) throws IOException {
-        System.err.println("Request from " + exchange.getRemoteAddress().toString() + " was malformed");
+        logger.warning("Request from " + exchange.getRemoteAddress().toString() + " was malformed");
         sendResponse(exchange, "Bad request", HttpCodes.BAD_REQUEST);
     }
 }

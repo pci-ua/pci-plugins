@@ -28,7 +28,7 @@ public interface SubCommand {
     /** Get the different permissions
      * @return the list of the sub-command's different permissions
      */
-    Map<String, String> getPermissions(); //TODO: Revoir la façon de gérer les permissions
+    Map<String, String> getPermissions();
 
     /**
      * Sub-command's usage

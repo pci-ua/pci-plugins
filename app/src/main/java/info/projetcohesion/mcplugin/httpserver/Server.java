@@ -1,12 +1,14 @@
 package info.projetcohesion.mcplugin.httpserver;
 
 import com.sun.net.httpserver.HttpServer;
+import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.utils.FileUtils;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 /**
  * The integrated HTTP server
@@ -14,6 +16,7 @@ import java.util.concurrent.Executors;
 public class Server {
     private static HttpServer s_server;
     private static final FileUtils s_config = new FileUtils("http");
+    private static final Logger logger = Plugin.getPlugin().getLogger();
 
     /**
      * Start the integrated HTTP server
@@ -29,7 +32,7 @@ public class Server {
             s_server.setExecutor(Executors.newFixedThreadPool(s_config.get().getInt("perfs.threads")));
             s_server.start();
 
-            System.out.println("HTTP server started on " + s_server.getAddress().toString());
+            logger.info("HTTP server started on " + s_server.getAddress().toString());
         }
     }
 
@@ -41,7 +44,7 @@ public class Server {
         if(s_server != null) { // Don't stop an already stopped server
             s_server.stop(0); // Stop now
             s_server = null; // Stopped HttpServer objects can't be reused
-            System.out.println("HTTP server stopped");
+            logger.info("HTTP server stopped");
         }
     }
 
@@ -63,7 +66,7 @@ public class Server {
         } if (s_config.get().getConfigurationSection("perfs") == null) {
             s_config.get().set("perfs.threads", Runtime.getRuntime().availableProcessors());
 
-            System.out.println("Using all " + Runtime.getRuntime().availableProcessors() + " detected CPUs for HTTP traffic handling. You can change this in the config file.");
+            logger.info("Using all " + Runtime.getRuntime().availableProcessors() + " detected CPUs for HTTP traffic handling. You can change this in the config file.");
         }
 
         s_config.save();
