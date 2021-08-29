@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 /**
@@ -50,6 +51,11 @@ public class FileHandler implements HttpHandler {
     private String _redirectUrl;
 
     /**
+     * Save the last time an IP has sent a request.
+     */
+    private HashMap<String, Long> ipTime = new HashMap<>();
+
+    /**
      * Create a <code>FileHandler</code> object.
      * @param redirectUrl The URL to redirect to after a successful image upload.
      */
@@ -68,7 +74,20 @@ public class FileHandler implements HttpHandler {
      */
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        logger.info("HTTP request from " + exchange.getRemoteAddress().toString()); // Log the IPs addresses
+        String ip = exchange.getRemoteAddress().getAddress().toString();
+
+        logger.info("HTTP request from " + ip); // Log the IPs addresses
+
+        // Rate-limit check
+        if (ipTime.containsKey(ip) && System.nanoTime() - ipTime.get(ip) < 10000000000L) { // 10 secs
+            logger.warning("Remote " + ip + " has been rate-limited !");
+            ipTime.put(ip, System.nanoTime());
+            sendResponse(exchange, "You are issuing too many requests ! Try again later.", HttpCodes.TOO_MANY_REQUESTS);
+            return;
+        } else {
+            ipTime.put(ip, System.nanoTime());
+        }
+
         if (exchange.getRequestMethod().equalsIgnoreCase("POST")) {
             byte[] data = exchange.getRequestBody().readAllBytes();
 
