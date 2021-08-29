@@ -29,4 +29,9 @@ public class HttpCodes {
      * When the client used a method (such as POST or GET) that is not supported by the server
      */
     public static final int METHOD_NOT_ALLOWED = 405;
+
+    /**
+     * When the client is sending too many requests in a short amount of time.
+     */
+    public static final int TOO_MANY_REQUESTS = 429;
 }
