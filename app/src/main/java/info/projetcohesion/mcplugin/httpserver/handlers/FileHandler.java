@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpHandler;
 import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.commands.MapArtCommand;
 import info.projetcohesion.mcplugin.httpserver.HttpCodes;
+import info.projetcohesion.mcplugin.utils.JarRessourceLoader;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -39,6 +40,25 @@ public class FileHandler implements HttpHandler {
 
     // ---- END CONSTANTS ----
 
+    // ---- HTML FILES ----
+
+    /**
+     * The HTML to send to the client when rate limited
+     */
+    private String _rateLimitHTML;
+
+    /**
+     * The HTML to send to the client when a non POST request is sent
+     */
+    private String _notPostHTML;
+
+    /**
+     * The HTML to send to the client when a bad request is received
+     */
+    private String _badRequestHTML;
+
+    // ---- END HTML ----
+
     /**
      * The plugin-wide logger
      * @see org.bukkit.plugin.PluginLogger
@@ -64,6 +84,28 @@ public class FileHandler implements HttpHandler {
         assert !redirectUrl.isBlank();
 
         _redirectUrl = redirectUrl;
+
+        // HTML files
+        try {
+            _rateLimitHTML = JarRessourceLoader.load("/html/RateLimit.html");
+        } catch (IOException e) {
+            logger.severe("Failed to load /html/RateLimit.html from the JAR archive !");
+            _rateLimitHTML = "You are issuing too many requests. Try again later.";
+        }
+
+        try {
+            _notPostHTML = JarRessourceLoader.load("/html/NotPostError.html");
+        } catch (IOException e) {
+            logger.severe("Failed to load /html/NotPostError.html from the JAR archive !");
+            _notPostHTML = "This server only support POST requests.";
+        }
+
+        try {
+            _badRequestHTML = JarRessourceLoader.load("/html/BadRequest.html");
+        } catch (IOException e) {
+            logger.severe("Failed to load /html/BadRequest.html from the JAR archive !");
+            _badRequestHTML = "Bad request";
+        }
     }
 
     /**
@@ -75,14 +117,13 @@ public class FileHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String ip = exchange.getRemoteAddress().getAddress().toString();
-
         logger.info("HTTP request from " + ip); // Log the IPs addresses
 
         // Rate-limit check
         if (ipTime.containsKey(ip) && System.nanoTime() - ipTime.get(ip) < 10000000000L) { // 10 secs
             logger.warning("Remote " + ip + " has been rate-limited !");
             ipTime.put(ip, System.nanoTime());
-            sendResponse(exchange, "You are issuing too many requests ! Try again later.", HttpCodes.TOO_MANY_REQUESTS);
+            sendResponse(exchange, _rateLimitHTML, HttpCodes.TOO_MANY_REQUESTS);
             return;
         } else {
             ipTime.put(ip, System.nanoTime());
@@ -119,7 +160,7 @@ public class FileHandler implements HttpHandler {
 
             sendResponse(exchange, imageID, HttpCodes.MOVED_PERMANENTLY, _redirectUrl + "?id=" + imageID);
         } else {
-            sendResponse(exchange, exchange.getRequestMethod()+" is not supported (POST only)", HttpCodes.METHOD_NOT_ALLOWED);
+            sendResponse(exchange, _notPostHTML, HttpCodes.METHOD_NOT_ALLOWED);
         }
     }
 
@@ -194,6 +235,6 @@ public class FileHandler implements HttpHandler {
      */
     private void badRequest(HttpExchange exchange) throws IOException {
         logger.warning("Request from " + exchange.getRemoteAddress().toString() + " was malformed");
-        sendResponse(exchange, "Bad request", HttpCodes.BAD_REQUEST);
+        sendResponse(exchange, _badRequestHTML, HttpCodes.BAD_REQUEST);
     }
 }
