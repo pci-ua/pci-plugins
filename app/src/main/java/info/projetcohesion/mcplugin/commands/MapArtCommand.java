@@ -1,5 +1,6 @@
 package info.projetcohesion.mcplugin.commands;
 
+import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.SubCommand;
 import info.projetcohesion.mcplugin.events.MapInitEvent;
 import info.projetcohesion.mcplugin.utils.ImageStorageManager;
@@ -59,6 +60,7 @@ public class MapArtCommand implements SubCommand {
             player.sendMessage(ChatColor.GREEN + "Il y a actuellement " + ChatColor.GOLD + s_storage.size() + ChatColor.GREEN + " image(s) stockée(s) actuellement.");
         } else if(args.length == 2 && args[1].equalsIgnoreCase("clear") && player.isOp()) { // /pci mapart clear
             s_storage.clean();
+            Plugin.getPlugin().getMapInitEvent().reset();
             player.sendMessage(ChatColor.GREEN + "Vidé.");
         } else if(args.length == 2 && args[1].equalsIgnoreCase("get")) { // /pci mapart get
             player.sendMessage(ChatColor.RED + "ID manquant. Usage : /pci mapart get <ID>");

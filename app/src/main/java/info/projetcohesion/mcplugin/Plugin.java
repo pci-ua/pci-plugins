@@ -24,6 +24,8 @@ public class Plugin extends JavaPlugin {
     private static Plugin s_plugin;
     private CommandManager _commandManager;
 
+    private MapInitEvent mapInitEvent;
+
     @Override
     public void onEnable() {
         s_plugin = this;
@@ -60,11 +62,13 @@ public class Plugin extends JavaPlugin {
      * Register the events.
      */
     public void registerEvents() {
+        mapInitEvent = new MapInitEvent();
+
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerChunkChangeEvent(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerServerJoinEvent(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new FancyInventoryEvent(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new ChunkDamageEvent(), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new MapInitEvent(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(mapInitEvent, this);
     }
 
     /**
@@ -74,6 +78,10 @@ public class Plugin extends JavaPlugin {
      */
     public static Plugin getPlugin() {
         return s_plugin;
+    }
+
+    public MapInitEvent getMapInitEvent() {
+        return mapInitEvent;
     }
 
     public CommandManager getCommandManager() {
