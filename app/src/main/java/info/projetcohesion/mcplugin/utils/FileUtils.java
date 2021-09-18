@@ -76,5 +76,4 @@ public class FileUtils {
     public void reload() {
         this._customFile = YamlConfiguration.loadConfiguration(this._file);
     }
-
 }
