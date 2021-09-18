@@ -6,7 +6,9 @@ import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.commands.MapArtCommand;
 import info.projetcohesion.mcplugin.httpserver.HttpCodes;
 import info.projetcohesion.mcplugin.utils.JarRessourceLoader;
+import info.projetcohesion.mcplugin.utils.TextFileLoader;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -45,17 +47,17 @@ public class FileHandler implements HttpHandler {
     /**
      * The HTML to send to the client when rate limited
      */
-    private String _rateLimitHTML;
+    private String _rateLimitHTML = "You are issuing too many requests. Try again later.";
 
     /**
      * The HTML to send to the client when a non POST request is sent
      */
-    private String _notPostHTML;
+    private String _notPostHTML = "This server only support POST requests.";
 
     /**
      * The HTML to send to the client when a bad request is received
      */
-    private String _badRequestHTML;
+    private String _badRequestHTML = "Bad request";
 
     // ---- END HTML ----
 
@@ -79,32 +81,52 @@ public class FileHandler implements HttpHandler {
      * Create a <code>FileHandler</code> object.
      * @param redirectUrl The URL to redirect to after a successful image upload.
      */
-    public FileHandler(String redirectUrl) {
+    public FileHandler(String redirectUrl, boolean useBuiltInMessages) {
         assert redirectUrl != null;
         assert !redirectUrl.isBlank();
 
         _redirectUrl = redirectUrl;
 
         // HTML files
-        try {
-            _rateLimitHTML = JarRessourceLoader.load("/html/RateLimit.html");
-        } catch (IOException e) {
-            logger.severe("Failed to load /html/RateLimit.html from the JAR archive !");
-            _rateLimitHTML = "You are issuing too many requests. Try again later.";
-        }
+        if(useBuiltInMessages) {
+            try {
+                _rateLimitHTML = JarRessourceLoader.load("/html/RateLimit.html");
+            } catch (IOException e) {
+                logger.severe("Failed to load /html/RateLimit.html from the JAR archive !");
+            }
 
-        try {
-            _notPostHTML = JarRessourceLoader.load("/html/NotPostError.html");
-        } catch (IOException e) {
-            logger.severe("Failed to load /html/NotPostError.html from the JAR archive !");
-            _notPostHTML = "This server only support POST requests.";
-        }
+            try {
+                _notPostHTML = JarRessourceLoader.load("/html/NotPostError.html");
+            } catch (IOException e) {
+                logger.severe("Failed to load /html/NotPostError.html from the JAR archive !");
+            }
 
-        try {
-            _badRequestHTML = JarRessourceLoader.load("/html/BadRequest.html");
-        } catch (IOException e) {
-            logger.severe("Failed to load /html/BadRequest.html from the JAR archive !");
-            _badRequestHTML = "Bad request";
+            try {
+                _badRequestHTML = JarRessourceLoader.load("/html/BadRequest.html");
+            } catch (IOException e) {
+                logger.severe("Failed to load /html/BadRequest.html from the JAR archive !");
+            }
+        } else {
+            try {
+                _rateLimitHTML = TextFileLoader.load(new File(Plugin.getPlugin().getDataFolder(), "html/RateLimit.html"));
+            } catch (IOException e) {
+                logger.severe("Failed to load RateLimit.html from the config directory !");
+                e.printStackTrace();
+            }
+
+            try {
+                _notPostHTML = TextFileLoader.load(new File(Plugin.getPlugin().getDataFolder(), "html/NotPostError.html"));
+            } catch (IOException e) {
+                logger.severe("Failed to load NotPostError.html from the config directory !");
+                e.printStackTrace();
+            }
+
+            try {
+                _badRequestHTML = TextFileLoader.load(new File(Plugin.getPlugin().getDataFolder(), "html/BadRequest.html"));
+            } catch (IOException e) {
+                logger.severe("Failed to load BadRequest.html from the config directory !");
+                e.printStackTrace();
+            }
         }
     }
 

@@ -43,7 +43,7 @@ public class Server {
             checkConfig();
 
             s_server = HttpServer.create(new InetSocketAddress(Objects.requireNonNull(s_config.get().getString("server.hostname")), s_config.get().getInt("server.port")), 0);
-            s_server.createContext("/", new FileHandler(Objects.requireNonNull(s_config.get().getString("redirect.target"))));
+            s_server.createContext("/", new FileHandler(Objects.requireNonNull(s_config.get().getString("redirect.target")), s_config.get().getBoolean("messages.built-in")));
             s_server.createContext("/robots.txt", new RobotsHandler());
             s_server.setExecutor(Executors.newFixedThreadPool(s_config.get().getInt("perfs.threads")));
             s_server.start();
@@ -88,6 +88,8 @@ public class Server {
             s_config.get().set("redirect.target", "https://example.org/");
 
             logger.warning("The redirect.target configuration value has been created with https://example.org/ as the default. You may want to change that.");
+        } if(s_config.get().getConfigurationSection("messages") == null) {
+            s_config.get().set("messages.built-in", true);
         }
 
         s_config.save();
