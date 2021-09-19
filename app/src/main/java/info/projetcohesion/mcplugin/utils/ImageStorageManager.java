@@ -59,7 +59,7 @@ public class ImageStorageManager implements Serializable {
      * @see ImageMagick
      * @see ImageStorageManager#getFreeID()
      */
-    public String convertAndAdd(byte[] data) throws IOException {
+    public String convertAndAdd(byte[] data) throws IOException, ImageMagick.ImageMagickException {
         String id = this.getFreeID();
 
         byte[] bmp = ImageMagick.command("convert - -resize 128x128! BMP:-", data);

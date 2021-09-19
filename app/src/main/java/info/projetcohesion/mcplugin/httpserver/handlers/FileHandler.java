@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpHandler;
 import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.commands.MapArtCommand;
 import info.projetcohesion.mcplugin.httpserver.HttpCodes;
+import info.projetcohesion.mcplugin.utils.ImageMagick;
 import info.projetcohesion.mcplugin.utils.JarRessourceLoader;
 import info.projetcohesion.mcplugin.utils.TextFileLoader;
 
@@ -59,6 +60,11 @@ public class FileHandler implements HttpHandler {
      */
     private String _badRequestHTML = "Bad request";
 
+    /**
+     * The HTML to send to the client when ImageMagick fails
+     */
+    private String _magickFailHTML = "Something went wrong. Is your file an image ?";
+
     // ---- END HTML ----
 
     /**
@@ -106,6 +112,12 @@ public class FileHandler implements HttpHandler {
             } catch (IOException e) {
                 logger.severe("Failed to load /html/BadRequest.html from the JAR archive !");
             }
+
+            try {
+                _magickFailHTML = JarRessourceLoader.load("/html/MagickFail.html");
+            } catch (IOException e) {
+                logger.severe("Failed to load /html/MagickFail.html from the JAR archive !");
+            }
         } else {
             try {
                 _rateLimitHTML = TextFileLoader.load(new File(Plugin.getPlugin().getDataFolder(), "html/RateLimit.html"));
@@ -125,6 +137,13 @@ public class FileHandler implements HttpHandler {
                 _badRequestHTML = TextFileLoader.load(new File(Plugin.getPlugin().getDataFolder(), "html/BadRequest.html"));
             } catch (IOException e) {
                 logger.severe("Failed to load BadRequest.html from the config directory !");
+                e.printStackTrace();
+            }
+
+            try {
+                _magickFailHTML = TextFileLoader.load(new File(Plugin.getPlugin().getDataFolder(), "html/MagickFail.html"));
+            } catch (IOException e) {
+                logger.severe("Failed to load MagickFail.html from the config directory !");
                 e.printStackTrace();
             }
         }
@@ -178,7 +197,17 @@ public class FileHandler implements HttpHandler {
 
             data = Arrays.copyOfRange(data, endHeadersIndex, endFooterIndex-1); // Remove the header and footer
 
-            String imageID = MapArtCommand.getImageManager().convertAndAdd(data);
+            String imageID;
+
+            try {
+                imageID = MapArtCommand.getImageManager().convertAndAdd(data);
+            } catch (ImageMagick.ImageMagickException e) {
+                logger.severe("Failed to convert the image !");
+                e.printStackTrace();
+
+                sendResponse(exchange, _magickFailHTML, HttpCodes.SERVER_INTERNAL_ERROR);
+                return;
+            }
 
             sendResponse(exchange, imageID, HttpCodes.MOVED_PERMANENTLY, _redirectUrl + "?id=" + imageID);
         } else {
