@@ -77,7 +77,7 @@ public class Plugin extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerServerJoinEvent(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new FancyInventoryEvent(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new ChunkDamageEvent(), this);
-        Bukkit.getServer().getPluginManager().registerEvents(MapInitEvent, this);
+        Bukkit.getServer().getPluginManager().registerEvents(mapInitEvent, this);
     }
 
     /**
