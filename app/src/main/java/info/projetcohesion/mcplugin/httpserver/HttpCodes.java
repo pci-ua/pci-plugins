@@ -34,4 +34,9 @@ public class HttpCodes {
      * When the client is sending too many requests in a short amount of time.
      */
     public static final int TOO_MANY_REQUESTS = 429;
+
+    /**
+     * When the server encounters an internal error.
+     */
+    public static final int SERVER_INTERNAL_ERROR = 500;
 }
