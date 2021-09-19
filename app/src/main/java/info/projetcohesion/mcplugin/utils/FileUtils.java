@@ -77,4 +77,11 @@ public class FileUtils {
         this._customFile = YamlConfiguration.loadConfiguration(this._file);
     }
 
+	/**
+     * Get the config file
+     * @return The config file
+     */
+    public File getFile() {
+        return _file;
+    }
 }

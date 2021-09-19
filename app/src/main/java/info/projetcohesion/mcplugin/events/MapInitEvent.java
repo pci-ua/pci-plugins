@@ -1,5 +1,6 @@
 package info.projetcohesion.mcplugin.events;
 
+import info.projetcohesion.mcplugin.Plugin;
 import info.projetcohesion.mcplugin.map.ImageMapRenderer;
 import info.projetcohesion.mcplugin.utils.FileUtils;
 import org.bukkit.event.EventHandler;
@@ -8,12 +9,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.MapInitializeEvent;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Handle the creation of maps, with or without images
  * @see Listener
- * @see org.bukkit.plugin.PluginManager#registerEvents(Listener, Plugin)
+ * @see org.bukkit.plugin.PluginManager#registerEvents(Listener, org.bukkit.plugin.Plugin)
  */
 public class MapInitEvent implements Listener {
     private static String s_wipId;
@@ -47,6 +47,17 @@ public class MapInitEvent implements Listener {
         }
 
         map.addRenderer(new ImageMapRenderer(id));
+    }
+
+	/**
+     * Reset the currently associated images and map IDs
+     */
+    public void reset() {
+        if(idMap.getFile().delete()) {
+            idMap.reload();
+        } else {
+            Plugin.getPlugin().getLogger().severe("Failed to delete the maps ID file ! " + idMap.getFile().getAbsolutePath());
+        }
     }
 
     /**
