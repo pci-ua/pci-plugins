@@ -221,7 +221,10 @@ public class FileHandler implements HttpHandler {
         exchange.sendResponseHeaders(code, text.length());
         os.write(text.getBytes(StandardCharsets.UTF_8));
         os.flush();
-        os.close();
+
+        exchange.getRequestBody().readAllBytes(); // Clear the request, to avoid connection reset errors
+
+        exchange.close();
     }
 
     /**
