@@ -15,6 +15,11 @@ public class HttpCodes {
      */
     public static final int CREATED = 201;
 
+	/**
+	 * When the resource asked by the client has been moved permanently
+	 */
+	public static final int MOVED_PERMANENTLY = 301;
+
     /**
      * When the client sent a malformed request to the server
      */
@@ -24,4 +29,14 @@ public class HttpCodes {
      * When the client used a method (such as POST or GET) that is not supported by the server
      */
     public static final int METHOD_NOT_ALLOWED = 405;
+
+    /**
+     * When the client is sending too many requests in a short amount of time.
+     */
+    public static final int TOO_MANY_REQUESTS = 429;
+
+    /**
+     * When the server encounters an internal error.
+     */
+    public static final int SERVER_INTERNAL_ERROR = 500;
 }

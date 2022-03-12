@@ -1,23 +1,23 @@
 # Plugin pour le serveur Minecraft de l'association PC[i]
-## Fonctionnalités à implémenter
-- Système de claim de zone (à déterminer)
-- Power-ups dans les zones claim
-- Génération de map arts via un serveur HTTP
-- Écrire un vrai README quand un peu de travail sera fait
+## Fonctionalités
+### Génération de cartes avec images
+![Image d'exemple](docs/mapart.png)
+Permet d'envoyer une image via un navigateur web qui peut être affichée en jeu sur une carte.
 
-![Release status](https://github.com/pci-ua/pci-plugins/actions/workflows/build-release.yml/badge.svg)
-![Master status](https://github.com/pci-ua/pci-plugins/actions/workflows/check-build.yml/badge.svg)
+### Gestion de zones
+Un joueur peut revendiquer plusieurs chunks comme lui appartenant, et y appliquer différents effets, comme par exemple une protection contre les dégâts naturels.
 
-## Style de code pour les contributions
-```java
-private int _privateField;
-public static int s_staticField;
-private static int s_privateStaticField;
+Le propriétaire peut mettre sur liste blanche d'autres joueurs pour leur donner plus de droits sur sa zone.
 
-/**
- * Javadoc
- */
-public void functionName(int argNumberOne, String argNumberTwo) {
-    this._privateField++; // Not _privateField without 'this.' before
-}
-```
+### Économie
+Chaque joueur possède une certaine somme d'argent qu'il peut dépenser comme il le souhaite (de joueur à joueur ou dans des améliorations de zone).
+
+## Dépendances
+- [Spigot](https://www.spigotmc.org)
+- [ImageMagick](https://imagemagick.org)
+    - Debian (et dérivés) : `sudo apt install imagemagick`
+    - Arch Linux (et dérivés) : `sudo pacman -S imagemagick`
+    - Windows (avec le [Gestionnaire de paquets Windows](https://github.com/microsoft/winget-cli)) : `winget install ImageMagick.ImageMagick`
+
+## Contribuer au projet
+Voir les détails dans [CONTRIBUTING.md](CONTRIBUTING.md).
